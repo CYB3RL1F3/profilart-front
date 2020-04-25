@@ -1,19 +1,37 @@
-import React from 'react';
-import { ReactComponent as Logo } from './logo.svg';
-import './App.css';
+import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
+import { Router } from 'react-router';
 
-export const App = () => {
+import AppLayout from 'components/layouts';
+import { Routes } from 'Routes';
+import { AppState } from 'reducers';
+import { History, Location } from "history";
+import { Store, CombinedState, AnyAction } from "redux";
+
+export interface AppProps {
+  store: Store<CombinedState<AppState>, AnyAction>;
+  history: History;
+}
+
+export interface AppSelector {
+  authenticated: boolean;
+  checked: boolean;
+  location: Location | null;
+}
+
+export const Root: FC<AppProps> = ({ history }) => {
+  const { authenticated, location } = useSelector<AppState, AppSelector>(({ session, routing }) => ({
+    authenticated: session.authenticated,
+    checked: session.checked,
+    location: routing.location
+  }));
   return (
-    <div className="App">
-      <header className="App-header">
-        <Logo style={{ width: '100%', height: '100%' }} />
-        <p>
-          <code>React ESLint Boilerplate</code>
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppLayout>
+        <Router history={history}>
+          <Routes authenticated={authenticated} location={location} />
+        </Router>
+    </AppLayout>
   );
 };
+
+export default Root;

@@ -12,7 +12,6 @@
   "extends": [
     "prettier",
     "prettier/react",
-    "eslint:recommended",
     "plugin:react/recommended",
     "prettier/@typescript-eslint",
     "plugin:@typescript-eslint/recommended"
@@ -20,6 +19,9 @@
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "react/prop-type": {
+      "ignore": true
+    },
     "@typescript-eslint/explicit-function-return-type": "off"
   },
   "globals": {
