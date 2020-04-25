@@ -1,26 +1,27 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import axios from 'axios';
+
 import axiosMiddleware from 'redux-axios-middleware';
 import reducers from 'reducers';
 import { sessionService } from 'redux-react-session';
 import { createBrowserHistory } from 'history';
-import { AUTHENTICATE_SUCCESS } from 'constants/user';
+import { AUTHENTICATE } from 'constants/user';
+import { client } from 'utils/client';
 
 export const history = createBrowserHistory();
 
 export const configureStore = (isDev: boolean) => {
-  const client = axios.create({
-    baseURL: 'https://profilart.fr',
-    responseType: 'json'
-  });
 
   const axiosMiddlewareConfig = {
     onSuccess: ({ action, response }: any) => {
-      if (action.type === AUTHENTICATE_SUCCESS) {
+      console.log(action, response);
+      if (action.type === AUTHENTICATE) {
         const { data } = response;
-        sessionService.saveSession(data);
-        sessionService.saveUser(data);
-        return Promise.resolve(response);
+        if (data.authenticated) {
+          sessionService.saveSession(data);
+          sessionService.saveUser(data);
+          return Promise.resolve(data);
+        }
+       
       }
     }
   }
@@ -55,4 +56,6 @@ export const configureStore = (isDev: boolean) => {
 
 const isDev = process.env.NODE_ENV === "development";
 
-export default configureStore(isDev);
+const store = configureStore(isDev);
+
+export default store;

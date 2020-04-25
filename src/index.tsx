@@ -3,13 +3,15 @@ import { render } from 'react-dom';
 import { sessionService } from 'redux-react-session';
 import store, { history } from './store';
 import Root from 'Root';
+import { getSessionValidator } from 'utils/session';
 import "./index.css";
 import "./window";
 
 const options = {
     refreshOnCheckAuth: true,
     redirectPath: '/login',
-    driver: 'LOCALSTORAGE'
+    driver: 'LOCALSTORAGE',
+    validateSession: getSessionValidator(store)
 };
 
 sessionService.initSessionService(store, options).then(() => {

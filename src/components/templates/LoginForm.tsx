@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { Button } from 'primereact/button';
 import { Input } from "components/atoms";
 import { Credentials } from "types/Profile";
-import { Grid, GridCol12 } from '../atoms/Grid';
-import { Message, MessageType } from "components/atoms/Message";
+import { Grid, GridCol12 } from 'components/atoms/Grid';
+import Message, { MessageType } from "components/atoms/Message";
 export interface LoginFormProps {
   onSubmit: (credentials: Credentials) => void;
   deleted?: boolean;

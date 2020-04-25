@@ -51,3 +51,5 @@ export const Message: FC<MessageProps> = ({ summary, details, type }) => {
     </div>
 )
 }
+
+export default Message;

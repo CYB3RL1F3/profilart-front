@@ -14,7 +14,7 @@ export const getHeaders = <Options = {}>(toBeAuthenticated?: boolean, extraOptio
   if (toBeAuthenticated) {
     const token = getToken();
     if (token) {
-      headers.authorize = token;
+      headers.authorization = token;
     } else {
       throw new Error('no authenticated');
     }

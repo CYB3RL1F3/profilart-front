@@ -23,7 +23,7 @@ export const getProfile = () => (
       request:{
         url:'/profile',
         method: 'get',
-        headers: getHeaders()
+        headers: getHeaders(true)
       }
     }
   }
