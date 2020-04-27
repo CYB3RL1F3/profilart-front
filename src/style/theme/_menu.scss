@@ -102,7 +102,7 @@ body {
     .p-megamenu .p-menuitem-link,
     .p-slidemenu .p-menuitem-link {
         padding: $menuitemPadding;
-        color: $textColor;
+        color: $menuTextColor;
         min-height: 2.286em;
         @include border-radius(0);
 
@@ -112,7 +112,7 @@ body {
 
         .p-menuitem-icon {
             font-size: 18px;
-            color: $textSecondaryColor;
+            color: $menuIconColor;
         }
 
         &:hover {
@@ -202,6 +202,8 @@ body {
     .p-menubar {
         @include content();
         @include corner-all();
+        background: none;
+        border: none;
         padding: 0;
 
         .p-menubar-root-list {
@@ -237,7 +239,7 @@ body {
 
         .p-menuitem {
             margin: 0;
-
+            
             &.p-menuitem-active {
                 > .p-menuitem-link {
                     @include hover-element();

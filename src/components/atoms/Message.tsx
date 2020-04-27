@@ -9,9 +9,10 @@ export interface MessageProps {
   summary: string;
   details?: string;
   type: MessageType;
+  onClose?: () => void;
 }
 
-export const Message: FC<MessageProps> = ({ summary, details, type }) => {
+export const Message: FC<MessageProps> = ({ onClose, summary, details, type }) => {
 
   const [hidden, toggle] = useState(false);
   const classname = classnames({
@@ -28,14 +29,16 @@ export const Message: FC<MessageProps> = ({ summary, details, type }) => {
     "pi": true,
     "pi-times": type === "error",
     "pi-check": type === "success"
-  })
+  });
+
   const close = useCallback(() => {
     toggle(true);
-  }, [toggle]);
+    onClose && onClose();
+  }, [toggle, onClose]);
   return (
-  <div>
-    <div className={classname}>
-      <div className="p-messages-wrapper">
+    <div>
+      <div className={classname}>
+        <div className="p-messages-wrapper">
           <button onClick={close} type="button" className="p-messages-close p-link">
             <i className="p-messages-close-icon pi pi-times"></i>
           </button>
@@ -49,7 +52,7 @@ export const Message: FC<MessageProps> = ({ summary, details, type }) => {
         </div>
       </div>
     </div>
-)
+  )
 }
 
 export default Message;

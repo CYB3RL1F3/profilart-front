@@ -14,12 +14,9 @@ export interface ResidentAdvisorProfile {
 export interface SoundcloudProfile {
   id: string;
   url: string;
-  clientId: string;
-  clientSecret: string;
 }
 
 export interface DiscogsProfile {
-  artistId: number;
   url: string;
 }
 
@@ -36,6 +33,7 @@ export interface MailerProfile {
 
 export interface ProfileData {
   artistName: string;
+  website?: string;
   uid: string;
   residentAdvisor?: ResidentAdvisorProfile;
   soundcloud?: SoundcloudProfile;
@@ -60,12 +58,16 @@ export interface Credentials {
 }
 
 export interface UpdateProfilePayload extends ProfileData {
-  password?: string;
+  password: string;
   newPassword?: string;
-  email?: string;
+  email: string;
   newEmail?: string;
   totalReplace?: boolean;
   token?: boolean;
+}
+
+export interface UpdateProfileFormData extends UpdateProfilePayload {
+  confirmPassword?: string;
 }
 
 export interface DeletedStatus {
@@ -73,3 +75,7 @@ export interface DeletedStatus {
 }
 
 export type CreateProfilePayload = Omit<ProfileData, "uid"> & Credentials;
+
+export interface CreateProfileFormData extends CreateProfilePayload {
+  confirmPassword?: string;
+}

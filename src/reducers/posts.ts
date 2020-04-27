@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { GET_POSTS, GET_POSTS_SUCCESS, GET_POSTS_FAIL, UPDATE, UPDATE_FAIL, UPDATE_SUCCESS, CREATE, CREATE_SUCCESS, CREATE_FAIL, DELETE, DELETE_SUCCESS, DELETE_FAIL } from 'constants/post';
+import { GET_POSTS, GET_POSTS_SUCCESS, GET_POSTS_FAIL, UPDATE_POST, UPDATE_POST_FAIL, UPDATE_POST_SUCCESS, CREATE_POST, CREATE_POST_SUCCESS, CREATE_POST_FAIL, DELETE_POST, DELETE_POST_SUCCESS, DELETE_POST_FAIL } from 'constants/post';
 import { Post } from 'types/Posts';
 import { AnyAction } from 'redux';
 
@@ -36,13 +36,13 @@ export const apiReducer = handleActions({
     success: false,
     loading: false
   }),
-  [CREATE]: (state) => ({
+  [CREATE_POST]: (state) => ({
     posts: state.posts,
     success: false,
     loading: true,
     error: false
   }),
-  [CREATE_SUCCESS]: (state, { payload }: AnyAction) => ({
+  [CREATE_POST_SUCCESS]: (state, { payload }: AnyAction) => ({
     posts: [
       ...state.posts,
       payload
@@ -51,37 +51,37 @@ export const apiReducer = handleActions({
     loading: false,
     error: false
   }),
-  [CREATE_FAIL]: (state, { error }) => ({
+  [CREATE_POST_FAIL]: (state, { error }) => ({
     ...state,
     error,
     success: false,
     loading: false
   }),
-  [UPDATE]: (state) => ({
+  [UPDATE_POST]: (state) => ({
     posts: state.posts,
     success: false,
     loading: true,
     error: false
   }),
-  [UPDATE_SUCCESS]: (state, { payload }: AnyAction) => ({
+  [UPDATE_POST_SUCCESS]: (state, { payload }: AnyAction) => ({
       posts: state.posts.map(p => p._id === payload._id ? payload : p),
       success: true,
       loading: false,
       error: false
     }),
-  [UPDATE_FAIL]: (state, { error }) => ({
+  [UPDATE_POST_FAIL]: (state, { error }) => ({
     ...state,
     error,
     success: false,
     loading: false
   }),
-  [DELETE]: (state) => ({
+  [DELETE_POST]: (state) => ({
     posts: state.posts,
     success: false,
     loading: true,
     error: false
   }),
-  [DELETE_SUCCESS]: (state, { payload }: AnyAction) => {
+  [DELETE_POST_SUCCESS]: (state, { payload }: AnyAction) => {
     return {
       posts: state.posts.filter(p => p._id !== payload.id),
       success: true,
@@ -89,7 +89,7 @@ export const apiReducer = handleActions({
       error: false
     }
   },
-  [DELETE_FAIL]: (state, { error }) => ({
+  [DELETE_POST_FAIL]: (state, { error }) => ({
     ...state,
     error,
     success: false,

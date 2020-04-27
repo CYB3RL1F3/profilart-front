@@ -1,15 +1,15 @@
 .layout-wrapper {
        .layout-main {
-        margin-left: 60px;
         @include transition(margin-left $transitionDuration);
         @include box-sizing(border-box);
 
         .layout-topbar {
             height: 64px;
             background-color: $primaryColor;
-            padding: 16px 42px 16px 24px;
+            // padding: 16px 42px 16px 24px;
+            padding: 16px 5px 16px 5px;
             position: fixed;
-            width: calc(100% - 40px);
+            width: 100%;
             @include transition(width $transitionDuration);
             @include multi-shadow(0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 4px 5px 0 rgba(0, 0, 0, 0.14));
             @include box-sizing(border-box);
@@ -347,7 +347,10 @@
         }
 
         .layout-content {
-            padding: 17px 17px 24px 17px;
+            padding: 90px 17px 24px 17px;
+            &.register {
+                padding: 30px 17px 24px 17px;
+            }
         }
 
         .layout-main-mask {

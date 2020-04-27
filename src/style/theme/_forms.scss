@@ -54,7 +54,10 @@ body {
     .md-inputfield {
         display: block;
         position:relative;
-
+        min-height: 40px;
+        > input {
+            width: 100%;
+        }
         > label {
             color:#999;
             font-weight:normal;

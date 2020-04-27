@@ -1,6 +1,10 @@
-import { AUTHENTICATE, GET_PROFILE, CREATE, UPDATE, DELETE } from 'constants/user';
+import { AUTHENTICATE, GET_PROFILE, CREATE_USER, UPDATE_USER, DELETE_USER, DISCONNECT, CLOSE_USER_CREATE_NOTIF, CLOSE_USER_DELETE_NOTIF, CLOSE_USER_ERROR_NOTIF } from 'constants/user';
 import { getHeaders } from 'utils/api';
 import { CreateProfilePayload, Credentials, UpdateProfilePayload } from 'types/Profile';
+import { sessionService } from 'redux-react-session';
+import store from "store";
+import { createAction } from 'redux-actions';
+import { CLOSE_USER_UPDATE_NOTIF } from '../constants/user';
 
 export const authenticate = (credentials: Credentials) => (
   {
@@ -15,6 +19,13 @@ export const authenticate = (credentials: Credentials) => (
     }
   }
 )
+
+export const disconnect = createAction(DISCONNECT);
+
+export const logout = async () => {
+  await sessionService.deleteSession();
+  store.dispatch(disconnect());
+}
 
 export const getProfile = () => (
   {
@@ -31,10 +42,10 @@ export const getProfile = () => (
 
 export const createProfile = (profile: CreateProfilePayload) => (
   {
-    type: CREATE,
+    type: CREATE_USER,
     payload: {
       request:{
-        url:'/profile',
+        url:'/create',
         method: 'post',
         headers: getHeaders(),
         data: JSON.stringify(profile)
@@ -45,7 +56,7 @@ export const createProfile = (profile: CreateProfilePayload) => (
 
 export const updateProfile = (profile: UpdateProfilePayload) => (
   {
-    type: UPDATE,
+    type: UPDATE_USER,
     payload: {
       request:{
         url:'/profile',
@@ -59,7 +70,7 @@ export const updateProfile = (profile: UpdateProfilePayload) => (
 
 export const deleteProfile = (uid: string) => (
   {
-    type: DELETE,
+    type: DELETE_USER,
     payload: {
       request:{
         url: `/profile/${uid}`,
@@ -69,3 +80,11 @@ export const deleteProfile = (uid: string) => (
     }
   }
 )
+
+export const closeCreateNotification = createAction(CLOSE_USER_CREATE_NOTIF);
+
+export const closeUpdateNotification = createAction(CLOSE_USER_UPDATE_NOTIF);
+
+export const closeDeleteNotification = createAction(CLOSE_USER_DELETE_NOTIF);
+
+export const closeErrorNotification = createAction(CLOSE_USER_ERROR_NOTIF);

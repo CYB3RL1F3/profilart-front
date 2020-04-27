@@ -10,6 +10,7 @@ export interface RoutesProps {
 }
 
 export const Routes: FC<RoutesProps> = ({ authenticated, location }) => {
+  
   return (
     <Switch>
       <PrivateRoute

@@ -1,4 +1,4 @@
-export { default as Input } from "./Input";
 export { default as Password } from "./Password";
 export { default as Grid } from './Grid';
+export { default as Card } from './Card';
 export { default as Message } from './Message';

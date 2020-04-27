@@ -1,10 +1,11 @@
-import React, { FC, useState, useCallback } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from 'primereact/button';
-import { Input } from "components/atoms";
+import { Input } from "components/molecules";
 import { Credentials } from "types/Profile";
-import { Grid, GridCol12 } from 'components/atoms/Grid';
+import { Grid, GridCol } from 'components/atoms/Grid';
 import Message, { MessageType } from "components/atoms/Message";
+import { Link } from "react-router-dom";
 export interface LoginFormProps {
   onSubmit: (credentials: Credentials) => void;
   deleted?: boolean;
@@ -13,16 +14,36 @@ export interface LoginFormProps {
 }
 
 export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, error }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { handleSubmit } = useForm();
-  const submit = useCallback(() => {
+  const { handleSubmit, register, setValue } = useForm();
+  const submit = useCallback((values) => {
+    const { email, password } = values;
     if (email && password)
     onSubmit({
       email,
       password
     })
-  }, [email, password, onSubmit]);
+  }, [onSubmit]);
+
+  useEffect(() => {
+    register({ 
+      name: "email" 
+    }, { 
+      required: true, 
+      pattern: {
+        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+        message: "invalid email address"
+      }
+    });
+    register({ 
+      name: "password" 
+    }, { 
+      required: true
+    });
+  }, [register]);
+
+  const setEmail = useCallback(value => setValue("email", value), [setValue]);
+  const setPassword = useCallback(value => setValue("password", value), [setValue]);
+
 
   const icon = loading ? 'pi-spin pi-spinner' : 'pi-md-person';
   return (
@@ -30,41 +51,41 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
       <form onSubmit={handleSubmit(submit)} className="login-panel">
           <div className="login-panel-content">
             <Grid>
-                <GridCol12>
+                <GridCol>
                   <h1>Sign-in to Profilart</h1>
-                </GridCol12>
+                </GridCol>
                 <input type="hidden" value="something" />
-                <GridCol12>
+                <GridCol>
                   {error && (
                     <Message type={MessageType.error} summary="Invalid credentials" />
                   )}
                   {deleted && (
                     <Message type={MessageType.success} summary="Account successfully deleted" />
                   )}
-                </GridCol12>
-                <GridCol12>
-                  <Input
-                    id="email"
-                    type="email"
-                    label="email" 
-                    value={email}
-                    required
-                    keyfilter="email"
-                    onChange={setEmail} />
-                </GridCol12>
-                <GridCol12>
-                  <Input
-                    id="password"
-                    label="password"
-                    type="password"
-                    required
-                    value={password} 
-                    onChange={setPassword} 
-                  />
-                </GridCol12>
-                <GridCol12>
+                </GridCol>
+                <Input
+                  id="email"
+                  type="email"
+                  label="email"
+                  required
+                  keyfilter="email"
+                  onChange={setEmail} />
+                <Input
+                  id="password"
+                  label="password"
+                  type="password"
+                  required
+                  onChange={setPassword} 
+                />
+                <GridCol>
                   <Button disabled={loading || false} label="sign in" icon={`pi ${icon}`} />
-                </GridCol12>
+                </GridCol>
+                <GridCol>
+                    <p>
+                      <Link to="/register">create an account</Link>
+                    </p>
+                </GridCol>
+                
             </Grid>
           </div>
       </form>

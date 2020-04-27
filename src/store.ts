@@ -12,16 +12,29 @@ export const history = createBrowserHistory();
 export const configureStore = (isDev: boolean) => {
 
   const axiosMiddlewareConfig = {
-    onSuccess: ({ action, response }: any) => {
+    onSuccess: ({ action, response, next }: any) => {
       console.log(action, response);
+      const { data } = response;
       if (action.type === AUTHENTICATE) {
-        const { data } = response;
         if (data.authenticated) {
           sessionService.saveSession(data);
           sessionService.saveUser(data);
-          return Promise.resolve(data);
+          next({
+            type: `${action.type}_SUCCESS`,
+            payload: data,
+            meta: {
+              previousAction: action
+            }
+          });
         }
-       
+      } else {
+        next({
+          type: `${action.type}_SUCCESS`,
+          payload: data,
+          meta: {
+            previousAction: action
+          }
+        });
       }
     }
   }

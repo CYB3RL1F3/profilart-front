@@ -45,6 +45,10 @@
 		font-size: 18px;
 		font-weight: 400;
 	}
+	p {
+		line-height: 18px;
+		padding-bottom: 20px;
+	}
 }
 
 .nopad {
@@ -327,4 +331,26 @@
 			font-size: 14px;
 		}
 	}
+}
+
+.slider {
+  & .p-col.p-col-12 {
+    min-height: 60px;
+    display: flex;
+		flex-direction: column;
+		label {
+			height: 30px;
+		}
+	}
+	&.disabled > .p-col.p-col-12 > label {
+		color: #CCC;
+	}
+}
+
+.checkbox {
+	margin-bottom: 10px;
+}
+
+p.disabled {
+	color: #CCC;
 }

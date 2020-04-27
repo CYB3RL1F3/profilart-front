@@ -1,6 +1,6 @@
-import { GET_POSTS, CREATE, UPDATE, DELETE } from 'constants/post';
+import { GET_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST } from 'constants/post';
 import { getHeaders } from 'utils/api';
-import { CreateProfilePayload, UpdateProfilePayload } from 'types/Profile';
+import { CreatePost, UpdatePost } from 'types/Posts';
 
 export const getPosts = (uid: string) => (
   {
@@ -15,9 +15,9 @@ export const getPosts = (uid: string) => (
   }
 )
 
-export const createProfile = (profile: CreateProfilePayload) => (
+export const createPost = (profile: CreatePost) => (
   {
-    type: CREATE,
+    type: CREATE_POST,
     payload: {
       request:{
         url:'/profile',
@@ -29,9 +29,9 @@ export const createProfile = (profile: CreateProfilePayload) => (
   }
 )
 
-export const updateProfile = (profile: UpdateProfilePayload) => (
+export const updatePost = (profile: UpdatePost) => (
   {
-    type: UPDATE,
+    type: UPDATE_POST,
     payload: {
       request:{
         url:'/profile',
@@ -43,9 +43,9 @@ export const updateProfile = (profile: UpdateProfilePayload) => (
   }
 )
 
-export const deleteProfile = (uid: string) => (
+export const deletePost = (uid: string) => (
   {
-    type: DELETE,
+    type: DELETE_POST,
     payload: {
       request:{
         url: `/profile/${uid}`,
