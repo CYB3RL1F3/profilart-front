@@ -1,14 +1,30 @@
 import { getHeaders, toQuery } from 'utils/api';
-import { CALL } from '../constants/api';
+import { CALL, CALL_CLOSE_ERROR, CALL_CLEAR } from 'constants/api';
 import { Params } from 'types/Api';
+import { createAction } from 'redux-actions';
 
-export const call = <Arguments extends Params>(uid: string, method: string, args: Arguments) => ({
+export const call = <Arguments extends Params>(uid: string, method: string, args?: Arguments) => ({
   type: CALL,
   payload: {
     request:{
-      url: `/${uid}/${method}?${toQuery(args)}`,
+      url: `/${uid}/${method}${toQuery(args)}`,
       method: 'get',
       headers: getHeaders()
     }
   }
 })
+
+export const callUrl = (url: string) => ({
+  type: CALL,
+  payload: {
+    request:{
+      url,
+      method: 'get',
+      headers: getHeaders()
+    }
+  }
+})
+
+export const closeApiNotificationError = createAction(CALL_CLOSE_ERROR);
+
+export const clear = createAction(CALL_CLEAR);

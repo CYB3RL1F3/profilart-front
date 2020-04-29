@@ -63,11 +63,16 @@ export interface UpdateProfilePayload extends ProfileData {
   email: string;
   newEmail?: string;
   totalReplace?: boolean;
-  token?: boolean;
+  cache?: {
+    use: boolean;
+    ttl: {
+      [service: string]: number;
+    };
+  };
 }
 
 export interface UpdateProfileFormData extends UpdateProfilePayload {
-  confirmPassword?: string;
+  confirmPassword: string;
 }
 
 export interface DeletedStatus {

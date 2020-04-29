@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useCallback, useEffect, useMemo } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Card } from "components/atoms";
 import { Input, Checkbox, Slider } from "components/molecules";
 import { useForm } from "react-hook-form";
-import { GridDashboard, GridCol6, GridCol } from "components/atoms/Grid";
+import { GridDashboard, GridCol6, GridCol, GridCol12 } from "components/atoms/Grid";
 import { Button } from "primereact/button";
-import { PASSWORD, CONFIRM_PASSWORD, WEBSITE, RESIDENT_ADVISOR, DISCOGS, MAILER, CACHE } from 'constants/profileForm';
-import { CURRENT_PASSWORD, ARTIST_NAME, EMAIL, SOUNDCLOUD } from '../../constants/profileForm';
+import { PASSWORD, CONFIRM_PASSWORD, WEBSITE, RESIDENT_ADVISOR, DISCOGS, MAILER, CACHE, CURRENT_PASSWORD, ARTIST_NAME, EMAIL, SOUNDCLOUD } from 'constants/profileForm';
 import { validateResidentAdvisor } from "utils/validators";
 import { Profile, UpdateProfileFormData } from 'types/Profile';
 
@@ -19,17 +18,37 @@ export interface ProfileFormProps {
   context: ProfileFormContexts;
   onSubmit: (values: UpdateProfileFormData) => void;
   defaultValues?: Profile;
+  loading: boolean;
 }
 
-export const ProfileForm: FC<ProfileFormProps> = ({ context, defaultValues, onSubmit }) => {
+export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultValues, onSubmit }) => {
+  const isCreationForm = useMemo(() => context === ProfileFormContexts.create, [context]);
+  const [submitted, setSubmitted] = useState<boolean>(false);
+  const activateAutoValidation = useCallback(() => {
+    setSubmitted(true);
+  }, [setSubmitted]);
+  const cleanValues = useCallback((values: UpdateProfileFormData): UpdateProfileFormData => {
+    if (!values.residentAdvisor?.userId && !values.residentAdvisor?.DJID && !values.residentAdvisor?.accessKey) {
+      delete values.residentAdvisor;
+    }
+    if (!values.soundcloud?.url) delete values.soundcloud;
+    if (!values.discogs?.url) delete values.discogs;
+    if (!values.mailer?.prefix && !values.mailer?.recipient) {
+      delete values.mailer;
+    }
+    if (!values.cache?.use) {
+      delete values.cache;
+    }
+    delete values.confirmPassword;
+    return values;
+  }, []);
   const submit = useCallback((values) => {
-    onSubmit(values);
+    onSubmit(cleanValues(values));
   }, [onSubmit]);
-  const { register, handleSubmit, errors, setValue, watch, getValues } = useForm({
+  const { register, handleSubmit, errors, setValue, watch, getValues } = useForm<any, any>({
     defaultValues
   });
-  console.log(errors, getValues());
-  const isCreationForm = useMemo(() => context === ProfileFormContexts.create, [context]);
+  console.log(errors, "XXX", getValues(), submitted);
   const doRegistration = useCallback((name: string, required: boolean, extraProps?: any) => {
     register({ 
       name
@@ -46,27 +65,27 @@ export const ProfileForm: FC<ProfileFormProps> = ({ context, defaultValues, onSu
   }, []);
 
 
-  const setEmail = useCallback((value: string) => setValue(EMAIL, value), [setValue]);
-  const setArtistName = useCallback((value: string) => setValue(ARTIST_NAME, value), [setValue]);
-  const setWebsite = useCallback((value: string) => setValue(WEBSITE, value), [setValue]);
-  const setPassword = useCallback((value: string) => setValue(PASSWORD, value), [setValue]);
-  const setConfirmPassword = useCallback((value: string) => setValue(CONFIRM_PASSWORD, value), [setValue]);
-  const setCurrentPassword = useCallback((value: string) => setValue(CURRENT_PASSWORD, value), [setValue]);
+  const setEmail = useCallback((value: string) => setValue(EMAIL, value, submitted), [setValue]);
+  const setArtistName = useCallback((value: string) => setValue(ARTIST_NAME, value, submitted), [setValue]);
+  const setWebsite = useCallback((value: string) => setValue(WEBSITE, value, submitted), [setValue]);
+  const setPassword = useCallback((value: string) => setValue(PASSWORD, value, submitted), [setValue]);
+  const setConfirmPassword = useCallback((value: string) => setValue(CONFIRM_PASSWORD, value, submitted), [setValue]);
+  const setCurrentPassword = useCallback((value: string) => setValue(CURRENT_PASSWORD, value, submitted), [setValue]);
 
-  const setAccessKey = useCallback((value: string) => setValue(RESIDENT_ADVISOR.ACCESS_KEY, value), [setValue]);
-  const setDJID = useCallback((value: string) => setValue(RESIDENT_ADVISOR.DJID, value), [setValue]);
-  const setUserId = useCallback((value: string) => setValue(RESIDENT_ADVISOR.USER_ID, value), [setValue]);
+  const setAccessKey = useCallback((value: string) => setValue(RESIDENT_ADVISOR.ACCESS_KEY, value, submitted), [setValue]);
+  const setDJID = useCallback((value: string) => setValue(RESIDENT_ADVISOR.DJID, value, submitted), [setValue]);
+  const setUserId = useCallback((value: string) => setValue(RESIDENT_ADVISOR.USER_ID, value, submitted), [setValue]);
   
-  const setSoundcloud = useCallback((value: string) => setValue(SOUNDCLOUD.URL, value), [setValue]);
-  const setDiscogs = useCallback((value: string) => setValue(DISCOGS.URL, value), [setValue]);
+  const setSoundcloud = useCallback((value: string) => setValue(SOUNDCLOUD.URL, value, submitted), [setValue]);
+  const setDiscogs = useCallback((value: string) => setValue(DISCOGS.URL, value, submitted), [setValue]);
   
-  const setRecipient = useCallback((value: string) => setValue(MAILER.RECIPIENT, value), [setValue]);
-  const setPrefix = useCallback((value: string) => setValue(MAILER.PREFIX, value), [setValue]);
+  const setRecipient = useCallback((value: string) => setValue(MAILER.RECIPIENT, value, submitted), [setValue]);
+  const setPrefix = useCallback((value: string) => setValue(MAILER.PREFIX, value, submitted), [setValue]);
 
-  const setUseCache = useCallback((value: boolean) => setValue(CACHE.USE, value), [setValue]);
-  const setSoundcloudCacheTTL = useCallback((value: number) => setValue(CACHE.TTL.SOUNDCLOUD, value), [setValue]);
-  const setDiscogsCacheTTL = useCallback((value: number) => setValue(CACHE.TTL.DISCOGS, value), [setValue]);
-  const setResidentAdvisorCacheTTL = useCallback((value: number) => setValue(CACHE.TTL.RA, value), [setValue]);
+  const setUseCache = useCallback((value: boolean) => setValue(CACHE.USE, value, submitted), [setValue]);
+  const setSoundcloudCacheTTL = useCallback((value: number) => setValue(CACHE.TTL.SOUNDCLOUD, value, submitted), [setValue]);
+  const setDiscogsCacheTTL = useCallback((value: number) => setValue(CACHE.TTL.DISCOGS, value, submitted), [setValue]);
+  const setResidentAdvisorCacheTTL = useCallback((value: number) => setValue(CACHE.TTL.RA, value, submitted), [setValue]);
   
   useEffect(() => {
     doRegistration(EMAIL, true, {
@@ -75,33 +94,52 @@ export const ProfileForm: FC<ProfileFormProps> = ({ context, defaultValues, onSu
         message: "invalid email address"
       }
     });
-    
-    doRegistration(WEBSITE, true);
-    doRegistration(ARTIST_NAME, true);
-
-    doRegistration(PASSWORD, false);
-    doRegistration(CONFIRM_PASSWORD, false, {
-      validate: (value: string) => value === watch(isCreationForm ? CURRENT_PASSWORD : PASSWORD)
+    doRegistration(WEBSITE, true, {
+      validate: (value: string) => !value || value === "" || /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/gmi.test(value) ? true : "invalid URL"
     });
-    doRegistration(CURRENT_PASSWORD, true);
+    doRegistration(ARTIST_NAME, true, {
+      min: 2
+    });
+
+    doRegistration(PASSWORD, false, {
+      validate: (value: string) => !value || value === "" || /^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=_]).*$/gm.test(value) ? true : "Requires at least 8 chars, including 1 major, 1 number and 1 special"
+    });
+    doRegistration(CONFIRM_PASSWORD, false, {
+      validate: (value: string) => value === watch(isCreationForm ? CURRENT_PASSWORD : PASSWORD) ? true : `Must match with your ${isCreationForm ? 'password' : 'new password'}`
+    });
+    doRegistration(CURRENT_PASSWORD, true, {
+      pattern: {
+        value: /^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=_]).*$/gm,
+        message: "Requires at least 8 chars, including 1 major, 1 number and 1 special"
+      }
+    });
 
     doRegistration(RESIDENT_ADVISOR.ACCESS_KEY, false, {
-      validate: (value: string) => validateResidentAdvisor(watch(RESIDENT_ADVISOR.DJID), value, watch(RESIDENT_ADVISOR.USER_ID))
+      validate: {
+        allSet: (value: string) => !value || value === "" || validateResidentAdvisor(watch(RESIDENT_ADVISOR.DJID), value, watch(RESIDENT_ADVISOR.USER_ID)) ? true : "All Resident Advisor API infos must be set"
+      }
     });
     doRegistration(RESIDENT_ADVISOR.DJID, false, {
-      validate: (value: string) => validateResidentAdvisor(value, watch(RESIDENT_ADVISOR.ACCESS_KEY), watch(RESIDENT_ADVISOR.USER_ID))
+      validate: {
+        mustBeNumber: (value: string) => !value || value === "" || /[0-9]*/gm.test(value) ? true : "Can only be a number",
+        allSet: (value: string) => !value || value === "" || validateResidentAdvisor(value, watch(RESIDENT_ADVISOR.ACCESS_KEY), watch(RESIDENT_ADVISOR.USER_ID)) ? true : "All Resident Advisor API infos must be set"
+      }
     });
     doRegistration(RESIDENT_ADVISOR.USER_ID, false, {
-      validate: (value: string) => validateResidentAdvisor(watch(RESIDENT_ADVISOR.ACCESS_KEY), watch(RESIDENT_ADVISOR.DJID), value)
+      validate: {
+        mustBeNumber: (value: string) => !value || value === "" || /[0-9]*/gm.test(value) ? true : "Can only be a number",
+        allSet: (value: string) => !value || value === "" || validateResidentAdvisor(watch(RESIDENT_ADVISOR.ACCESS_KEY), watch(RESIDENT_ADVISOR.DJID), value) ? true : "All Resident Advisor API infos must be set"
+      }
     });
 
-    doRegistration(SOUNDCLOUD.URL, false);
-    doRegistration(DISCOGS.URL, false);
+    doRegistration(SOUNDCLOUD.URL, false, {
+      validate: (value: string) => !value || value === "" || /^(?:https?:\/\/)?(soundcloud.com\/)[a-zA-Z0-9\-_.]*/gmi.test(value) ? true : "invalid Soundcloud artist page URL"
+    });
+    doRegistration(DISCOGS.URL, false, {
+      validate: (value: string) => !value || value === "" || /^(?:https?:\/\/)(www\.)?(discogs\.com\/artist\/)[a-zA-Z0-9\-_.].*/gmi.test(value) ? true :  "invalid Discogs artist page URL"
+    });
     doRegistration(MAILER.RECIPIENT, false, {
-      pattern: {
-        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-        message: "invalid email address"
-      }
+      validate: (value: string) => !value || value === "" || /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? true : "Invalid email address"
     });
     doRegistration(MAILER.PREFIX, false);
     doRegistration(CACHE.USE, false);
@@ -123,181 +161,203 @@ export const ProfileForm: FC<ProfileFormProps> = ({ context, defaultValues, onSu
         <GridCol6>
           <GridCol>
             <Card title="General informations">
-              <Input
-                id={EMAIL}
-                type="email"
-                label="Email"
-                defaultValue={defaultValues?.email}
-                keyfilter="email"
-                name={EMAIL}
-                onChange={setEmail}
-              />
-              <Input
-                id={ARTIST_NAME}
-                type="text"
-                label="Artist name"
-                defaultValue={defaultValues?.artistName}
-                name={ARTIST_NAME}
-                onChange={setArtistName}
-              />
-              <Input
-                id={WEBSITE}
-                type="text"
-                label="Website"
-                defaultValue={defaultValues?.website}
-                name={WEBSITE}
-                onChange={setWebsite}
-              />
-              
-              { errors.email && errors.email.message }
+              <GridCol12>
+                <Input
+                  id={EMAIL}
+                  type="email"
+                  label="Email"
+                  defaultValue={defaultValues?.email}
+                  keyfilter="email"
+                  name={EMAIL}
+                  onChange={setEmail}
+                  error={errors.email?.message || errors.email?.type}
+                />
+                <Input
+                  id={ARTIST_NAME}
+                  type="text"
+                  label="Artist name"
+                  defaultValue={defaultValues?.artistName}
+                  name={ARTIST_NAME}
+                  onChange={setArtistName}
+                  error={errors.artistName?.message || errors.artistName?.type}
+                />
+                <Input
+                  id={WEBSITE}
+                  type="text"
+                  label="Website"
+                  defaultValue={defaultValues?.website}
+                  name={WEBSITE}
+                  onChange={setWebsite}
+                  error={errors.website?.message || errors.website?.type}
+                />
+              </GridCol12>
             </Card>
           </GridCol>
           <GridCol>
             <Card title="Authentication informations">
-              {!isCreationForm && (
+              <GridCol12>
+                {!isCreationForm && (
+                  <Input
+                    id={CURRENT_PASSWORD}
+                    type="password"
+                    label="Current password"
+                    name={CURRENT_PASSWORD}
+                    onChange={setCurrentPassword}
+                    error={errors.password?.message || errors.password?.type}
+                />
+                )}
                 <Input
-                  id={CURRENT_PASSWORD}
+                  id={isCreationForm ? CURRENT_PASSWORD : PASSWORD}
                   type="password"
-                  label="Current password"
-                  name={CURRENT_PASSWORD}
-                  onChange={setCurrentPassword}
-              />
-              )}
-              <Input
-                id={isCreationForm ? CURRENT_PASSWORD : PASSWORD}
-                type="password"
-                label={passwordLabel} 
-                name={isCreationForm ? CURRENT_PASSWORD : PASSWORD}
-                onChange={isCreationForm ? setCurrentPassword : setPassword}
-              />
-              <Input
-                id={CONFIRM_PASSWORD}
-                type="password"
-                label="Confirm Password"
-                name={CONFIRM_PASSWORD}
-                onChange={setConfirmPassword}
-              />
+                  label={passwordLabel} 
+                  name={isCreationForm ? CURRENT_PASSWORD : PASSWORD}
+                  onChange={isCreationForm ? setCurrentPassword : setPassword}
+                  error={(isCreationForm ? errors.password?.message || errors.password?.type : errors.newPassword?.message || errors.newPassword?.type)}
+                />
+                <Input
+                  id={CONFIRM_PASSWORD}
+                  type="password"
+                  label="Confirm Password"
+                  name={CONFIRM_PASSWORD}
+                  onChange={setConfirmPassword}
+                  error={errors.confirmPassword?.message || errors.confirmPassword?.type}
+                />
+              </GridCol12>
             </Card>
           </GridCol>
           <GridCol>
             <Card title="Mailer configuration">
               <p>Configure your recipient for contact emails form through Profilart.</p>
-              <p></p>
-              <Input
-                id={MAILER.RECIPIENT}
-                type="email"
-                label="Recipient"
-                defaultValue={defaultValues?.mailer?.recipient}
-                name={MAILER.RECIPIENT}
-                onChange={setRecipient}
-              />
-              <Input
-                id={MAILER.PREFIX}
-                type="text"
-                label="Prefix" 
-                defaultValue={defaultValues?.mailer?.prefix}
-                name={MAILER.PREFIX}
-                onChange={setPrefix}
-              />
+              <GridCol12>
+                <Input
+                  id={MAILER.RECIPIENT}
+                  type="email"
+                  label="Recipient"
+                  defaultValue={defaultValues?.mailer?.recipient}
+                  name={MAILER.RECIPIENT}
+                  onChange={setRecipient}
+                  error={errors.mailer?.recipient?.message || errors.mailer?.recipient?.type}
+                />
+                <Input
+                  id={MAILER.PREFIX}
+                  type="text"
+                  label="Prefix" 
+                  defaultValue={defaultValues?.mailer?.prefix}
+                  error={errors.mailer?.prefix?.message || errors.mailer?.prefix?.type}
+                  name={MAILER.PREFIX}
+                  onChange={setPrefix}
+                />
+              </GridCol12>
             </Card>
           </GridCol>
         </GridCol6>
         <GridCol6>
           <GridCol>
             <Card title="Resident Advisor API Credentials">
-              <Input
-                id={RESIDENT_ADVISOR.ACCESS_KEY}
-                type="text"
-                label="Access key"
-                defaultValue={defaultValues?.residentAdvisor?.accessKey}
-                name={RESIDENT_ADVISOR.ACCESS_KEY}
-                onChange={setAccessKey}
-              />
-              <Input
-                id={RESIDENT_ADVISOR.DJID}
-                type="text"
-                label="DJID" 
-                defaultValue={defaultValues?.residentAdvisor?.DJID}
-                name={RESIDENT_ADVISOR.DJID}
-                onChange={setDJID}
-              />
-              <Input
-                id={RESIDENT_ADVISOR.USER_ID}
-                type="text"
-                label="User ID"
-                defaultValue={defaultValues?.residentAdvisor?.userId}
-                name={RESIDENT_ADVISOR.USER_ID}
-                onChange={setUserId}
-              />
+              <GridCol12>
+                <Input
+                  id={RESIDENT_ADVISOR.ACCESS_KEY}
+                  type="text"
+                  label="Access key"
+                  defaultValue={defaultValues?.residentAdvisor?.accessKey}
+                  name={RESIDENT_ADVISOR.ACCESS_KEY}
+                  onChange={setAccessKey}
+                  error={errors.residentAdvisor?.accessKey?.message || errors.residentAdvisor?.accessKey?.type}
+                />
+                <Input
+                  id={RESIDENT_ADVISOR.DJID}
+                  type="text"
+                  label="DJID" 
+                  defaultValue={defaultValues?.residentAdvisor?.DJID}
+                  name={RESIDENT_ADVISOR.DJID}
+                  onChange={setDJID}
+                  error={errors.residentAdvisor?.DJID?.message || errors.residentAdvisor?.DJID?.type}
+                />
+                <Input
+                  id={RESIDENT_ADVISOR.USER_ID}
+                  type="text"
+                  label="User ID"
+                  defaultValue={defaultValues?.residentAdvisor?.userId}
+                  name={RESIDENT_ADVISOR.USER_ID}
+                  onChange={setUserId}
+                  error={errors.residentAdvisor?.userId?.message || errors.residentAdvisor?.userId?.type}
+                />
+              </GridCol12>
             </Card>
           </GridCol>
           <GridCol>
             <Card title="Other information sources">
-              <Input
-                id={SOUNDCLOUD.URL}
-                type="text"
-                label="Soundcloud"
-                defaultValue={defaultValues?.soundcloud?.url}
-                name={SOUNDCLOUD.URL}
-                onChange={setSoundcloud}
-              />
-              <Input
-                id={DISCOGS.URL}
-                type="text"
-                defaultValue={defaultValues?.discogs?.url}
-                label="Discogs" 
-                name={DISCOGS.URL}
-                onChange={setDiscogs}
-              />
+              <GridCol12>
+                <Input
+                  id={SOUNDCLOUD.URL}
+                  type="text"
+                  label="Soundcloud"
+                  defaultValue={defaultValues?.soundcloud?.url}
+                  name={SOUNDCLOUD.URL}
+                  onChange={setSoundcloud}
+                  error={errors.soundcloud?.url?.message || errors.soundcloud?.url?.type}
+                />
+                <Input
+                  id={DISCOGS.URL}
+                  type="text"
+                  defaultValue={defaultValues?.discogs?.url}
+                  label="Discogs" 
+                  name={DISCOGS.URL}
+                  onChange={setDiscogs}
+                  error={errors.discogs?.url?.message || errors.discogs?.url?.type}
+                />
+              </GridCol12>
             </Card>
           </GridCol>
           <GridCol>
             <Card title="API Cache configuration">
               <p>You can parameter cache to improve API performance</p>
-              <Checkbox
-                id={CACHE.USE}
-                label="enable temp storing results in cache"
-                onChange={setUseCache}
-                name={CACHE.USE}
-                defaultChecked={defaultValues?.cache?.use}
-              />
-              <p className={disableCheckbox ? 'disabled' : ''}>Define cache TTL duration (in seconds):</p>
-              <Slider 
-                id={CACHE.TTL.SOUNDCLOUD}
-                label="Soundcloud : ## seconds"
-                defaultValue={defaultValues?.cache?.ttl?.soundcloud}
-                onChange={setSoundcloudCacheTTL}
-                disabled={disableCheckbox}
-                min={0}
-                max={7200}
-                step={5}
-              />
-              <Slider 
-                id={CACHE.TTL.DISCOGS}
-                label="Discogs : ## seconds"
-                defaultValue={defaultValues?.cache?.ttl?.discogs}
-                onChange={setDiscogsCacheTTL}
-                disabled={disableCheckbox}
-                min={0}
-                max={7200}
-                step={5}
-              />
-              <Slider 
-                id={CACHE.TTL.RA}
-                label="Resident Advisor : ## seconds"
-                defaultValue={defaultValues?.cache?.ttl?.RA}
-                onChange={setResidentAdvisorCacheTTL}
-                disabled={disableCheckbox}
-                min={0}
-                max={7200}
-                step={5}
-              />
+              <GridCol12>
+                <Checkbox
+                  id={CACHE.USE}
+                  label="enable temp storing results in cache"
+                  onChange={setUseCache}
+                  name={CACHE.USE}
+                  defaultChecked={defaultValues?.cache?.use}
+                />
+                <p className={disableCheckbox ? 'disabled' : ''}>Define cache TTL duration (in seconds):</p>
+                <Slider 
+                  id={CACHE.TTL.SOUNDCLOUD}
+                  label="Soundcloud : ## seconds"
+                  defaultValue={defaultValues?.cache?.ttl?.soundcloud}
+                  onChange={setSoundcloudCacheTTL}
+                  disabled={disableCheckbox}
+                  min={0}
+                  max={7200}
+                  step={5}
+                />
+                <Slider 
+                  id={CACHE.TTL.DISCOGS}
+                  label="Discogs : ## seconds"
+                  defaultValue={defaultValues?.cache?.ttl?.discogs}
+                  onChange={setDiscogsCacheTTL}
+                  disabled={disableCheckbox}
+                  min={0}
+                  max={7200}
+                  step={5}
+                />
+                <Slider 
+                  id={CACHE.TTL.RA}
+                  label="Resident Advisor : ## seconds"
+                  defaultValue={defaultValues?.cache?.ttl?.RA}
+                  onChange={setResidentAdvisorCacheTTL}
+                  disabled={disableCheckbox}
+                  min={0}
+                  max={7200}
+                  step={5}
+                />
+              </GridCol12>
             </Card>
           </GridCol>
           <GridCol className="buttonsBar">
-            <Button label={label} className="p-button-success" icon="pi pi-md-create" />
+            <Button disabled={loading} onClick={activateAutoValidation} label={label} className="p-button-success" icon="pi pi-md-create" />
             {!isCreationForm && (
-              <Button onClick={deleteAccount} label="Delete your account" className="p-button-danger" icon="pi pi-md-delete-forever" />
+              <Button disabled={loading} onClick={deleteAccount} label="Delete your account" className="p-button-danger" icon="pi pi-md-delete-forever" />
             )}
           </GridCol>
         </GridCol6>

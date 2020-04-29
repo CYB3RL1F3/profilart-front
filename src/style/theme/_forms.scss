@@ -1,7 +1,45 @@
+@keyframes welcome {
+    from {
+        transform: translateY(50px);
+        opacity: 0.1;
+    }
+    to {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
 body {
+    .editPage {
+        .p-grid h1 {
+            margin: 10px;
+        }
+        .p-grid p {
+            margin: 13px;
+        }
+        h4 {
+            margin: 10px 15px;
+        }
+        .card.card-w-title {
+            transform: translateY(50px);
+            opacity: 0.1;
+            animation: welcome 0.25s ease-out forwards;
+            h1 {
+                margin: 10px 0 20px 13px;
+            }
+        }
+        
+    }
+    .errorsPossibles p {
+        text-align: center;
+        width: 100%;
+        font-size: 14px;
+        line-height: 16px;
+        height: 16px;
+    }
     .p-inputtext {
         background: transparent no-repeat;
-        background-image: linear-gradient(to bottom, $primaryColor, $primaryColor), linear-gradient(to bottom, $inputBorderColor, $inputBorderColor) !important;
+        background-image: linear-gradient(to bottom, $primaryColor, $primaryColor), linear-gradient(to bottom, $inputBorderColor, $inputBorderColor);
         background-size: 0 2px, 100% 1px;
         background-position: 50% 100%, 50% 100%;
         transition: background-size 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);

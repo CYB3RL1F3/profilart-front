@@ -16,15 +16,16 @@ export interface Selector {
 }
 
 export const Main: FC = () => {
-  const { profile, updated, error } = useSelector<AppState, UserReducer>(({ user }) => user);
+  const { profile, loading, updated, error } = useSelector<AppState, UserReducer>(({ user }) => user);
 
   const dispatch = useDispatch();
 
   const onSubmit = useCallback((updatedProfile: UpdateProfileFormData) => {
-    if (!profile?.email) return;
-    delete updatedProfile.confirmPassword;
-    updatedProfile.newEmail = updatedProfile.email;
-    updatedProfile.email = profile?.email;
+    if (!profile || (profile && !profile?.email)) return;
+    if (profile.email !== updatedProfile.email) {
+      updatedProfile.newEmail = updatedProfile.email;
+      updatedProfile.email = profile.email;
+    }
     updatedProfile.uid = profile?.uid;
     dispatch(updateProfile(updatedProfile));
   }, [profile, dispatch]);
@@ -38,7 +39,7 @@ export const Main: FC = () => {
   }, [dispatch]);
 
   return (
-    <PageLayout>
+    <PageLayout className="editPage">
       <Grid>
         <GridCol6>
           <h1>Edit your profile</h1>
@@ -52,7 +53,12 @@ export const Main: FC = () => {
           <Message onClose={closeError} type={MessageType.error} summary="An error occured!!" details="Checkout your informations." />
         )}
       </Grid>
-      {profile && (<ProfileForm onSubmit={onSubmit} defaultValues={profile} context={ProfileFormContexts.edit} />)}
+      {profile && (
+        <>
+          <h4>Your profile UID: {profile.uid}</h4>
+          <ProfileForm loading={loading} onSubmit={onSubmit} defaultValues={profile} context={ProfileFormContexts.edit} />
+        </>
+      )}
       {!profile && <Message type={MessageType.error} summary="Impossible to edit inexisting profile" />}
       
     </PageLayout>

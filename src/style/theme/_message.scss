@@ -1,4 +1,12 @@
 body {
+    .input-error {
+        color: $errorMessageBgColor;     
+        position: absolute;
+        width: unset;
+        left: 3px;
+        top: 22px;
+        font-size: 8px;
+    }
     .p-messages {
         transition: opacity 0.25s;
         ul {

@@ -14,7 +14,7 @@ export interface LoginFormProps {
 }
 
 export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, error }) => {
-  const { handleSubmit, register, setValue } = useForm();
+  const { handleSubmit, register, setValue, errors } = useForm();
   const submit = useCallback((values) => {
     const { email, password } = values;
     if (email && password)
@@ -69,13 +69,16 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
                   label="email"
                   required
                   keyfilter="email"
-                  onChange={setEmail} />
+                  onChange={setEmail} 
+                  error={errors.email?.message || errors.email?.type}
+                />
                 <Input
                   id="password"
                   label="password"
                   type="password"
                   required
                   onChange={setPassword} 
+                  error={errors.password?.message || errors.password?.type}
                 />
                 <GridCol>
                   <Button disabled={loading || false} label="sign in" icon={`pi ${icon}`} />

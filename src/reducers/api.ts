@@ -1,38 +1,53 @@
 import { handleActions } from 'redux-actions';
-import { CALL, CALL_SUCCESS, CALL_FAIL } from 'constants/api';
+import { CALL, CALL_SUCCESS, CALL_FAIL, CALL_CLOSE_ERROR, CALL_CLEAR } from 'constants/api';
+import { AnyAction } from 'redux';
 
 export interface ApiReducer {
+    url: string;
     result: Object | null;
     success: boolean;
     loading: boolean;
-    error: string | null;
+    error: boolean;
 }
 
 export const initialState: ApiReducer = {
+    url: "",
     result: null,
     success: false,
     loading: false,
-    error: null
+    error: false
 };
 
 export const apiReducer = handleActions({
-  [CALL]: () => ({
+  [CALL]: (state, { payload }: AnyAction) => ({
+    url: payload.request.url,
     result: null,
     success: false,
     loading: true,
-    error: null
+    error: false
   }),
-  [CALL_SUCCESS]: (state, { payload }) => ({
-    result: payload.result,
+  [CALL_SUCCESS]: (state, { payload }: AnyAction) => ({
+    ...state,
+    result: payload,
     success: true,
     loading: false,
-    error: null
+    error: false
   }),
-  [CALL_FAIL]: (state, { payload }) => ({
+  [CALL_FAIL]: (state, { error }: AnyAction) => ({
+    ...state,
     result: null,
     success: false,
     loading: false,
-    error: payload.error
+    error: error
+  }),
+  [CALL_CLEAR]: (state) => ({
+    ...state,
+    url: "",
+    result: null
+  }),
+  [CALL_CLOSE_ERROR]: (state) => ({
+    ...state,
+    error: false
   })
 }, initialState);
 

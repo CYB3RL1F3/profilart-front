@@ -1,3 +1,5 @@
+
+
 export const EMAIL = "email";
 export const WEBSITE = "website";
 export const ARTIST_NAME = "artistName";
@@ -7,12 +9,10 @@ export const RESIDENT_ADVISOR = {
   USER_ID: "residentAdvisor.userId"
 };
 export const SOUNDCLOUD = {
-  URL: "soundcloud.url",
-  ID: "soundcloud.id"
+  URL: "soundcloud.url"
 };
 export const DISCOGS = {
-  URL: "discogs.url",
-  ARTIST_ID: "discogs.artistId"
+  URL: "discogs.url"
 };
 export const MAILER = {
   RECIPIENT: "mailer.recipient",
@@ -32,3 +32,4 @@ export const CONFIRM_PASSWORD = "confirmPassword";
 export const CURRENT_PASSWORD = "password";
 
 export const UID = "uid";
+

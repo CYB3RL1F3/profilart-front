@@ -22,4 +22,4 @@ export const getHeaders = <Options = {}>(toBeAuthenticated?: boolean, extraOptio
   return headers;
 }
 
-export const toQuery = (params: Params) => Object.keys(params).map(key => `${key}=${params[key]}`).join('&')
+export const toQuery = (params?: Params) => params ? `?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}` : ''

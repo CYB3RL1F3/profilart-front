@@ -1,3 +1,6 @@
-export const CALL: "api/call" = "api/call";
-export const CALL_SUCCESS: "api/call_success" = "api/call_success";
-export const CALL_FAIL: "api/call_fail" = "api/call_fail";
+export const CALL: "API/CALL" = "API/CALL";
+export const CALL_SUCCESS: "API/CALL_SUCCESS" = "API/CALL_SUCCESS";
+export const CALL_FAIL: "API/CALL_FAIL" = "API/CALL_FAIL";
+export const CALL_CLEAR: "API/CLEAR" = "API/CLEAR";
+export const CALL_CLOSE_ERROR: "API/CLOSE_ERROR" = "API/CLOSE_ERROR";
+export const BASE_URL: "https://profilart.fr" = "https://profilart.fr";

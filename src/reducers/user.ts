@@ -15,15 +15,15 @@ export interface UserReducer {
 }
 
 export const initialState: UserReducer = {
-      loading: false,
-      error: false,
-      authenticated: false,
-      token: null,
-      profile: null,
-      updated: false,
-      deleted: false,
-      created: false
-  }
+  loading: false,
+  error: false,
+  authenticated: false,
+  token: null,
+  profile: null,
+  updated: false,
+  deleted: false,
+  created: false
+}
 
 export const userReducer = handleActions(
   {

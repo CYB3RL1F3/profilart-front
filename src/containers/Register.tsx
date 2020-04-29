@@ -14,10 +14,9 @@ import { MessageType } from "components/atoms/Message";
 export const Register: FC<RouteComponentProps> = ({ history }) => {
   const dispatch = useDispatch();
   const onSubmit = useCallback((newProfile: CreateProfileFormData) => {
-    delete newProfile.confirmPassword;
     dispatch(createProfile(newProfile));
   }, [dispatch]);
-  const { created, error } = useSelector<AppState, UserReducer>(({ user }) => user);
+  const { created, error, loading } = useSelector<AppState, UserReducer>(({ user }) => user);
 
   const closeMessage = useCallback(() => {
     dispatch(closeCreateNotification());
@@ -58,7 +57,7 @@ export const Register: FC<RouteComponentProps> = ({ history }) => {
           <Message onClose={closeError} type={MessageType.error} summary="An error occured!!" details="Checkout your informations." />
         )}
       </Grid>
-      <ProfileForm onSubmit={onSubmit} context={ProfileFormContexts.create} />
+      <ProfileForm loading={loading} onSubmit={onSubmit} context={ProfileFormContexts.create} />
     </PageLayout>
   )
 };

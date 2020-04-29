@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, ReactElement } from "react";
 import { InputText } from "primereact/inputtext";
 import { GridCol } from "components/atoms/Grid";
 const uuid = require('react-uuid');
@@ -13,10 +13,11 @@ export interface InputProps {
   required?: boolean;
   defaultValue?: string;
   reference?: any;
+  error?: string | ReactElement<any, string> | any;
   onChange?: (value: string) => void;
 }
 
-export const Input: FC<InputProps> = ({ id = uuid(), name, reference, label, value, defaultValue, required, onChange, keyfilter=/.*/gmi, disabled=false, type = "text" }) => {
+export const Input: FC<InputProps> = ({ id = uuid(), error, name, reference, label, value, defaultValue, required, onChange, keyfilter=/.*/gmi, disabled=false, type = "text" }) => {
   const updateValue = useCallback((e) => {
     onChange && onChange(e.target.value);
   }, [onChange]);
@@ -24,6 +25,7 @@ export const Input: FC<InputProps> = ({ id = uuid(), name, reference, label, val
     <GridCol>
       <span className="md-inputfield">
         <InputText 
+          className={error ? 'p-error' : ''}
           type={type} 
           disabled={disabled} 
           id={id} 
@@ -33,9 +35,15 @@ export const Input: FC<InputProps> = ({ id = uuid(), name, reference, label, val
           defaultValue={defaultValue}
           name={name}
           required={required}
+          error={error}
           onChange={updateValue}
         />
-        <label htmlFor={id} children={label} />
+        <label htmlFor={id}>
+          {label}
+        </label>
+        {error && (
+          <span className="input-error">ERROR: {error}</span>
+        )}
       </span>
     </GridCol>
   )
