@@ -8,6 +8,7 @@ import { Button } from "primereact/button";
 import { PASSWORD, CONFIRM_PASSWORD, WEBSITE, RESIDENT_ADVISOR, DISCOGS, MAILER, CACHE, CURRENT_PASSWORD, ARTIST_NAME, EMAIL, SOUNDCLOUD } from 'constants/profileForm';
 import { validateResidentAdvisor } from "utils/validators";
 import { Profile, UpdateProfileFormData } from 'types/Profile';
+import { scrollToTopestElementClassName } from "utils/scroll";
 
 export enum ProfileFormContexts {
   edit = "edit",
@@ -27,7 +28,8 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
   const activateAutoValidation = useCallback(() => {
     setSubmitted(true);
   }, [setSubmitted]);
-  const cleanValues = useCallback((values: UpdateProfileFormData): UpdateProfileFormData => {
+
+  const mapValues = useCallback((values: UpdateProfileFormData): UpdateProfileFormData => {
     if (!values.residentAdvisor?.userId && !values.residentAdvisor?.DJID && !values.residentAdvisor?.accessKey) {
       delete values.residentAdvisor;
     }
@@ -39,12 +41,21 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
     if (!values.cache?.use) {
       delete values.cache;
     }
+    const currentEmail = `${defaultValues?.email}`;
+    if (!isCreationForm && currentEmail) {
+      values.totalReplace = (values.password === "" && values.newPassword === "" && values.email === currentEmail);
+      console.log(currentEmail, values.email, currentEmail && values.email !== currentEmail);
+      if (currentEmail && values.email !== currentEmail) {
+        values.newEmail = values.email;
+        values.email = currentEmail;
+      }
+    }
     delete values.confirmPassword;
     return values;
-  }, []);
+  }, [defaultValues]);
   const submit = useCallback((values) => {
-    onSubmit(cleanValues(values));
-  }, [onSubmit]);
+    onSubmit(mapValues(values));
+  }, [onSubmit, mapValues]);
   const { register, handleSubmit, errors, setValue, watch, getValues } = useForm<any, any>({
     defaultValues
   });
@@ -95,59 +106,63 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
       }
     });
     doRegistration(WEBSITE, true, {
-      validate: (value: string) => !value || value === "" || /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/gmi.test(value) ? true : "invalid URL"
+      validate: (value: string) => !value || /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/gmi.test(value) ? true : "invalid URL"
     });
     doRegistration(ARTIST_NAME, true, {
       min: 2
     });
 
     doRegistration(PASSWORD, false, {
-      validate: (value: string) => !value || value === "" || /^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=_]).*$/gm.test(value) ? true : "Requires at least 8 chars, including 1 major, 1 number and 1 special"
+      validate: (value: string) => !value || /^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=_]).*$/gm.test(value) ? true : "Requires at least 8 chars, including 1 major, 1 number and 1 special"
     });
     doRegistration(CONFIRM_PASSWORD, false, {
       validate: (value: string) => value === watch(isCreationForm ? CURRENT_PASSWORD : PASSWORD) ? true : `Must match with your ${isCreationForm ? 'password' : 'new password'}`
     });
-    doRegistration(CURRENT_PASSWORD, true, {
-      pattern: {
-        value: /^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=_]).*$/gm,
-        message: "Requires at least 8 chars, including 1 major, 1 number and 1 special"
-      }
-    });
-
+    doRegistration(CURRENT_PASSWORD, false);
+    
     doRegistration(RESIDENT_ADVISOR.ACCESS_KEY, false, {
       validate: {
-        allSet: (value: string) => !value || value === "" || validateResidentAdvisor(watch(RESIDENT_ADVISOR.DJID), value, watch(RESIDENT_ADVISOR.USER_ID)) ? true : "All Resident Advisor API infos must be set"
+        allSet: (value: string) => !!value || (!value && validateResidentAdvisor(watch(RESIDENT_ADVISOR.DJID), value, watch(RESIDENT_ADVISOR.USER_ID))) ? true : "All Resident Advisor API infos must be set"
       }
     });
     doRegistration(RESIDENT_ADVISOR.DJID, false, {
       validate: {
-        mustBeNumber: (value: string) => !value || value === "" || /[0-9]*/gm.test(value) ? true : "Can only be a number",
-        allSet: (value: string) => !value || value === "" || validateResidentAdvisor(value, watch(RESIDENT_ADVISOR.ACCESS_KEY), watch(RESIDENT_ADVISOR.USER_ID)) ? true : "All Resident Advisor API infos must be set"
+        allSet: (value: string) => !!value || (!value && validateResidentAdvisor(value, watch(RESIDENT_ADVISOR.ACCESS_KEY), watch(RESIDENT_ADVISOR.USER_ID))) ? true : "All Resident Advisor API infos must be set",
+        mustBeNumber: (value: string) => !value || /[0-9]*/gm.test(value) ? true : "Can only be a number"
       }
     });
     doRegistration(RESIDENT_ADVISOR.USER_ID, false, {
       validate: {
-        mustBeNumber: (value: string) => !value || value === "" || /[0-9]*/gm.test(value) ? true : "Can only be a number",
-        allSet: (value: string) => !value || value === "" || validateResidentAdvisor(watch(RESIDENT_ADVISOR.ACCESS_KEY), watch(RESIDENT_ADVISOR.DJID), value) ? true : "All Resident Advisor API infos must be set"
+        allSet: (value: string) => !!value || (!value && validateResidentAdvisor(watch(RESIDENT_ADVISOR.DJID), watch(RESIDENT_ADVISOR.ACCESS_KEY), value)) ? true : "All Resident Advisor API infos must be set",
+        mustBeNumber: (value: string) => !value || /[0-9]*/gm.test(value) ? true : "Can only be a number"
       }
     });
 
     doRegistration(SOUNDCLOUD.URL, false, {
-      validate: (value: string) => !value || value === "" || /^(?:https?:\/\/)?(soundcloud.com\/)[a-zA-Z0-9\-_.]*/gmi.test(value) ? true : "invalid Soundcloud artist page URL"
+      validate: (value: string) => !value || /^(?:https?:\/\/)?(soundcloud.com\/)[a-zA-Z0-9\-_.]*/gmi.test(value) ? true : "invalid Soundcloud artist page URL"
     });
     doRegistration(DISCOGS.URL, false, {
-      validate: (value: string) => !value || value === "" || /^(?:https?:\/\/)(www\.)?(discogs\.com\/artist\/)[a-zA-Z0-9\-_.].*/gmi.test(value) ? true :  "invalid Discogs artist page URL"
+      validate: (value: string) => !value || /^(?:https?:\/\/)(www\.)?(discogs\.com\/artist\/)[a-zA-Z0-9\-_.].*/gmi.test(value) ? true :  "invalid Discogs artist page URL"
     });
     doRegistration(MAILER.RECIPIENT, false, {
-      validate: (value: string) => !value || value === "" || /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? true : "Invalid email address"
+      validate: {
+        isValid: (value: string) => !value || /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? true : "Invalid email address",
+        canBeEmpty: (value: string) => !value || (!!value && !!watch(MAILER.PREFIX) ? true : "You can't define prefix without recipient")
+      }
     });
-    doRegistration(MAILER.PREFIX, false);
     doRegistration(CACHE.USE, false);
     doRegistration(CACHE.TTL.DISCOGS, false);
     doRegistration(CACHE.TTL.RA, false);
     doRegistration(CACHE.TTL.SOUNDCLOUD, false);
 
   }, []);
+
+  useEffect(() => {
+   setTimeout(() => {
+    const offset = 0.4 * window.innerHeight;
+    scrollToTopestElementClassName("input-error", offset);
+   }, 100);
+  })
 
   const usingCache = watch(CACHE.USE);
   const disableCheckbox = usingCache === undefined ? !defaultValues?.cache?.use || false : !usingCache;
@@ -202,6 +217,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
                     type="password"
                     label="Current password"
                     name={CURRENT_PASSWORD}
+                    disableAutofill
                     onChange={setCurrentPassword}
                     error={errors.password?.message || errors.password?.type}
                 />
@@ -209,6 +225,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
                 <Input
                   id={isCreationForm ? CURRENT_PASSWORD : PASSWORD}
                   type="password"
+                  autoComplete="new-password"
                   label={passwordLabel} 
                   name={isCreationForm ? CURRENT_PASSWORD : PASSWORD}
                   onChange={isCreationForm ? setCurrentPassword : setPassword}
@@ -275,7 +292,6 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
                 />
                 <Input
                   id={RESIDENT_ADVISOR.USER_ID}
-                  type="text"
                   label="User ID"
                   defaultValue={defaultValues?.residentAdvisor?.userId}
                   name={RESIDENT_ADVISOR.USER_ID}

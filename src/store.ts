@@ -36,6 +36,27 @@ export const configureStore = (isDev: boolean) => {
           }
         });
       }
+    },
+    onError: ( { action, error, next }: any) => {
+      console.log(error.response);
+      let { code, message } = error.response?.data?.error;
+      let fromApi = true;
+      if (!code && !message) {
+        code = error.response.status;
+        message = error.response.statusText;
+        fromApi = false;
+      }
+      next({
+        type: `${action.type}_FAIL`,
+        error: {
+          code,
+          message,
+          fromApi
+        },
+        meta: {
+          previousAction: action
+        }
+      });
     }
   }
   

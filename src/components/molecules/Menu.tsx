@@ -34,6 +34,12 @@ export const Menu: FC<RouteComponentProps> = ({ history }) => {
       icon: 'pi pi-md-web',
       url: '/posts',
       command
+    },
+    {
+      label: 'Contact support',
+      icon: 'pi pi-envelope',
+      url: '/support',
+      command
     }
   ]), [command]);
 

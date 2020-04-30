@@ -6,11 +6,12 @@ import { Credentials } from "types/Profile";
 import { Grid, GridCol } from 'components/atoms/Grid';
 import Message, { MessageType } from "components/atoms/Message";
 import { Link } from "react-router-dom";
+import { APIError } from 'types/Api';
 export interface LoginFormProps {
   onSubmit: (credentials: Credentials) => void;
   deleted?: boolean;
   loading?: boolean;
-  error?: boolean;
+  error?: APIError;
 }
 
 export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, error }) => {
@@ -57,7 +58,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
                 <input type="hidden" value="something" />
                 <GridCol>
                   {error && (
-                    <Message type={MessageType.error} summary="Invalid credentials" />
+                    <Message type={MessageType.error} summary={error.message} />
                   )}
                   {deleted && (
                     <Message type={MessageType.success} summary="Account successfully deleted" />
@@ -67,7 +68,6 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
                   id="email"
                   type="email"
                   label="email"
-                  required
                   keyfilter="email"
                   onChange={setEmail} 
                   error={errors.email?.message || errors.email?.type}
@@ -76,7 +76,6 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
                   id="password"
                   label="password"
                   type="password"
-                  required
                   onChange={setPassword} 
                   error={errors.password?.message || errors.password?.type}
                 />

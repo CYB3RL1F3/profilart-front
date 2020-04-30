@@ -1,6 +1,8 @@
 export const validateResidentAdvisor = (djid?: string, accessKey?: string, userId?: string) => {
-  const isEmptyDjid = djid === "";
-  const isEmptyAccessKey = accessKey === "";
-  const isEmptyUserId = userId === "";
-  return (isEmptyAccessKey && isEmptyDjid && isEmptyUserId) || (!isEmptyUserId && !isEmptyDjid && !isEmptyAccessKey);
+  console.log('=========');
+  console.log('USER ID => ', userId);
+  console.log('ACCESS KEY', accessKey);
+  console.log('DJID => ', djid);
+  console.log('=========');
+  return (!djid && !accessKey && !userId);
 }

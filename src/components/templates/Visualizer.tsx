@@ -9,11 +9,12 @@ import { useDispatch } from "react-redux";
 import { callUrl } from "actions/api";
 import { GridCol12 } from "components/atoms/Grid";
 import { BASE_URL } from 'constants/api';
+import { APIError } from 'types/Api';
 export interface VisualizerProps {
   query: string;
   result: Object | null;
   loading: boolean;
-  error: boolean;
+  error: APIError| null;
 }
 
 export const Visualizer: FC<VisualizerProps> = ({ error, query, result, loading }) => {
@@ -61,9 +62,10 @@ export const Visualizer: FC<VisualizerProps> = ({ error, query, result, loading 
                   <Message type={MessageType.error} summary="An error occured!" details="This query is failing." />
                 </GridCol12>
                 <GridCol12 className="errorsPossibles">
+                  <p>Reason: {error.message}</p>
                   <p>{possibleCause}</p>
                   <p>Please <Link to="/">check out your API configuration</Link> and retry.</p>
-                  <p><Button onClick={retry} label="Retry" /></p>
+                  <p><Button onClick={retry} label="Retry action call" /></p>
                 </GridCol12>
               </Grid>
             )}

@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import ProfileForm, { ProfileFormContexts } from 'components/templates/ProfileForm';
 import { PageLayout } from "components/layouts/PageLayout";
 import { Grid, Message } from "components/atoms";
@@ -9,6 +9,7 @@ import { AppState } from 'reducers';
 import { MessageType } from "components/atoms/Message";
 import { UserReducer } from "reducers/user";
 import { updateProfile, closeUpdateNotification, closeErrorNotification } from 'actions/user';
+import { scrollToElementClassName } from "utils/scroll";
 
 export interface Selector {
   profile: Profile | null;
@@ -21,11 +22,7 @@ export const Main: FC = () => {
   const dispatch = useDispatch();
 
   const onSubmit = useCallback((updatedProfile: UpdateProfileFormData) => {
-    if (!profile || (profile && !profile?.email)) return;
-    if (profile.email !== updatedProfile.email) {
-      updatedProfile.newEmail = updatedProfile.email;
-      updatedProfile.email = profile.email;
-    }
+    if (!profile || (profile && !profile?.uid)) return;
     updatedProfile.uid = profile?.uid;
     dispatch(updateProfile(updatedProfile));
   }, [profile, dispatch]);
@@ -37,6 +34,14 @@ export const Main: FC = () => {
   const closeError = useCallback(() => {
     dispatch(closeErrorNotification())
   }, [dispatch]);
+
+  useEffect(() => {
+    if (updated || error) {
+      setTimeout(() => {
+        scrollToElementClassName("messages", 20);
+      }, 100);
+    }
+  }, [updated, error])
 
   return (
     <PageLayout className="editPage">
@@ -50,7 +55,7 @@ export const Main: FC = () => {
           <Message onClose={closeMessage} type={MessageType.success} summary="Profile successfully updated!!" details="Your infos are now up to date." />
         )}
         {error && (
-          <Message onClose={closeError} type={MessageType.error} summary="An error occured!!" details="Checkout your informations." />
+          <Message onClose={closeError} type={MessageType.error} summary="An error occured!!" details={` ${error.message}. Checkout your informations.`} />
         )}
       </Grid>
       {profile && (

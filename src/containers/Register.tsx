@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import ProfileForm, { ProfileFormContexts } from 'components/templates/ProfileForm';
 import { PageLayout } from "components/layouts/PageLayout";
 import { Grid, Message } from "components/atoms";
@@ -10,6 +10,7 @@ import { CreateProfileFormData } from "types/Profile";
 import { AppState } from "reducers";
 import { UserReducer } from "reducers/user";
 import { MessageType } from "components/atoms/Message";
+import { scrollToElementClassName } from "utils/scroll";
 
 export const Register: FC<RouteComponentProps> = ({ history }) => {
   const dispatch = useDispatch();
@@ -34,6 +35,13 @@ export const Register: FC<RouteComponentProps> = ({ history }) => {
       closeMessage();
     }, 4000);
   }
+  useEffect(() => {
+  if (created) {
+    setTimeout(() => {
+      scrollToElementClassName("messages", 20);
+    }, 100);
+  }
+}, [created])
 
   return (
     <PageLayout className="register">
@@ -57,7 +65,7 @@ export const Register: FC<RouteComponentProps> = ({ history }) => {
           <Message onClose={closeError} type={MessageType.error} summary="An error occured!!" details="Checkout your informations." />
         )}
       </Grid>
-      <ProfileForm loading={loading} onSubmit={onSubmit} context={ProfileFormContexts.create} />
+      <ProfileForm loading={loading || created} onSubmit={onSubmit} context={ProfileFormContexts.create} />
     </PageLayout>
   )
 };

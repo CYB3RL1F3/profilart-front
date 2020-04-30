@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useMemo, useCallback, useState, useEffect } from "react";
+import React, { FC, useMemo, useCallback } from "react";
 import { Profile } from 'types/Profile';
 import { useDispatch } from "react-redux";
 import { call } from '../../actions/api';
@@ -10,18 +10,16 @@ import { MenuItem } from "primereact/components/menuitem/MenuItem";
 
 export interface ActionBarProps {
   profile: Profile;
-  initial: string | null;
+  defaultSelected: string | null;
 }
 
 export interface Action {
   label: string;
   command: () => void;
   disabled: boolean;
-  current: boolean;
 }
 
-export const ActionBar: FC<ActionBarProps> = ({ profile, initial }) => {
-  const [current, setCurrent] = useState<MenuItem>();
+export const ActionBar: FC<ActionBarProps> = ({ profile, defaultSelected }) => {
   
   const { uid, residentAdvisor, soundcloud, discogs } = profile;
   const dispatch = useDispatch();
@@ -30,58 +28,54 @@ export const ActionBar: FC<ActionBarProps> = ({ profile, initial }) => {
     !!residentAdvisor?.DJID && 
     !!residentAdvisor?.accessKey && 
     !!residentAdvisor?.userId, [residentAdvisor]);
+  
   const canDisplaySoundcloud = useMemo(() => 
     !!soundcloud && 
     !!soundcloud?.url, [soundcloud]);
+    
   const canDisplayDiscogs = useMemo(() => 
     !!discogs && 
     !!discogs?.url, [discogs]);
 
   const fetchInfos = useCallback((e) => {
     if (canDisplayResidentAdvisor) {
-      setCurrent(e.item);
       dispatch(call(uid, "infos"));
     }
-  }, [canDisplayResidentAdvisor, dispatch, uid, setCurrent]);
+  }, [canDisplayResidentAdvisor, dispatch, uid]);
 
-  const fetchCharts = useCallback((e) => {
+  const fetchCharts = useCallback(() => {
     if (canDisplayResidentAdvisor) {
-      setCurrent(e.item);
       dispatch(call(uid, "charts"));
     }
-  }, [canDisplayResidentAdvisor, dispatch, uid, setCurrent]);
+  }, [canDisplayResidentAdvisor, dispatch, uid]);
 
   const fetchReleases = useCallback((e) => {
     if (canDisplayDiscogs) {
-      setCurrent(e.item);
       dispatch(call(uid, "releases"));
     }
-  }, [canDisplayDiscogs, dispatch, uid, setCurrent]);
+  }, [canDisplayDiscogs, dispatch, uid]);
 
-  const fetchForthcomingEvents = useCallback((e) => {
+  const fetchForthcomingEvents = useCallback(() => {
     if (canDisplayResidentAdvisor) {
-      setCurrent(e.item);
       dispatch(call(uid, "events", {
         type: 1
       }))
     }
-  }, [canDisplayResidentAdvisor, dispatch, uid, setCurrent]);
+  }, [canDisplayResidentAdvisor, dispatch, uid]);
 
-  const fetchPastEvents = useCallback((e) => {
+  const fetchPastEvents = useCallback(() => {
     if (canDisplayResidentAdvisor) {
-      setCurrent(e.item);
       dispatch(call(uid, "events", {
         type: 2
       }))
     }
-  }, [canDisplayResidentAdvisor, dispatch, uid, setCurrent]);
+  }, [canDisplayResidentAdvisor, dispatch, uid]);
 
-  const fetchTracks = useCallback((e) => {
+  const fetchTracks = useCallback(() => {
     if (canDisplaySoundcloud) {
-      setCurrent(e.item);
       dispatch(call(uid, "tracks"));
     }
-  }, [canDisplaySoundcloud, dispatch, uid, setCurrent]);
+  }, [canDisplaySoundcloud, dispatch, uid]);
 
   const items: MenuItem[] = useMemo(() => [
     {
@@ -115,20 +109,14 @@ export const ActionBar: FC<ActionBarProps> = ({ profile, initial }) => {
       disabled: !canDisplaySoundcloud
     }
   ], [canDisplayDiscogs, canDisplayResidentAdvisor, canDisplaySoundcloud, fetchCharts, fetchForthcomingEvents, fetchInfos, fetchPastEvents, fetchReleases, fetchTracks])
-  
-  useEffect(() => {
-    const currentItemIndex = items.findIndex(i => i.label?.toLocaleLowerCase() === initial);
-    setTimeout(() => {
-      if (currentItemIndex > -1) setCurrent(items[currentItemIndex])
-    }, 500);
-  }, [])
-  
+  const initialItem = items.find(i => i.label?.toLocaleLowerCase() === defaultSelected) || items[0];
+
   return (
     <Grid className="actionbar">
       <GridCol12>
           <TabMenu
             model={items}
-            activeItem={current}
+            activeItem={initialItem}
           />
       </GridCol12>
     </Grid>

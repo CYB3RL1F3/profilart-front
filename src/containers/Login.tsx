@@ -5,12 +5,13 @@ import { Credentials } from 'types/Profile';
 import { authenticate } from '../actions/user';
 import { AppState } from 'reducers';
 import { Redirect } from "react-router-dom";
+import { APIError } from 'types/Api';
 
 export interface LoginSelector {
   authenticated: boolean;
   deleted: boolean;
   loading: boolean;
-  error: boolean;
+  error: APIError;
 }
 
 export const Login: FC = () => {
@@ -25,7 +26,7 @@ export const Login: FC = () => {
     authenticated: session.authenticated,
     deleted: user.deleted || false,
     loading: user.loading || false,
-    error: user.error || false
+    error: user.error || null
   }));
   if (authenticated) {
     return (

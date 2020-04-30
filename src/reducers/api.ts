@@ -1,13 +1,14 @@
 import { handleActions } from 'redux-actions';
 import { CALL, CALL_SUCCESS, CALL_FAIL, CALL_CLOSE_ERROR, CALL_CLEAR } from 'constants/api';
 import { AnyAction } from 'redux';
+import { APIError } from 'types/Api';
 
 export interface ApiReducer {
     url: string;
     result: Object | null;
     success: boolean;
     loading: boolean;
-    error: boolean;
+    error: APIError;
 }
 
 export const initialState: ApiReducer = {
@@ -15,7 +16,7 @@ export const initialState: ApiReducer = {
     result: null,
     success: false,
     loading: false,
-    error: false
+    error: null
 };
 
 export const apiReducer = handleActions({
@@ -24,21 +25,21 @@ export const apiReducer = handleActions({
     result: null,
     success: false,
     loading: true,
-    error: false
+    error: null
   }),
   [CALL_SUCCESS]: (state, { payload }: AnyAction) => ({
     ...state,
     result: payload,
     success: true,
     loading: false,
-    error: false
+    error: null
   }),
   [CALL_FAIL]: (state, { error }: AnyAction) => ({
     ...state,
     result: null,
     success: false,
     loading: false,
-    error: error
+    error
   }),
   [CALL_CLEAR]: (state) => ({
     ...state,
@@ -47,7 +48,7 @@ export const apiReducer = handleActions({
   }),
   [CALL_CLOSE_ERROR]: (state) => ({
     ...state,
-    error: false
+    error: null
   })
 }, initialState);
 

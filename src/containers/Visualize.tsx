@@ -45,7 +45,7 @@ export const Visualize: FC = () => {
           <h1>Test your API connection</h1>
         </GridCol6>
       </Grid>
-      <ActionBar initial={firstAvailable} profile={profile} />
+      <ActionBar defaultSelected={firstAvailable} profile={profile} />
       <Visualizer query={query} result={result} loading={loading} error={error} />
     </PageLayout>
   )
