@@ -2,28 +2,25 @@ import React, { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from 'primereact/button';
 import { Input } from "components/molecules";
-import { Credentials } from "types/Profile";
 import { Grid, GridCol } from 'components/atoms/Grid';
 import Message, { MessageType } from "components/atoms/Message";
 import { Link } from "react-router-dom";
 import { APIError } from 'types/Api';
 import { GridCol6 } from 'components/atoms/Grid';
-export interface LoginFormProps {
-  onSubmit: (credentials: Credentials) => void;
-  deleted?: boolean;
+export interface ForgottenPasswordFormProps {
+  onSubmit: (email: string) => void;
+  sent?: boolean;
   loading?: boolean;
   error?: APIError;
+  closeAndRedirect?: () => void;
 }
 
-export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, error }) => {
+export const ForgottenPasswordForm: FC<ForgottenPasswordFormProps> = ({ onSubmit, closeAndRedirect, loading, sent, error }) => {
   const { handleSubmit, register, setValue, errors } = useForm();
   const submit = useCallback((values) => {
-    const { email, password } = values;
-    if (email && password)
-    onSubmit({
-      email,
-      password
-    })
+    const { email } = values;
+    if (email)
+    onSubmit(email)
   }, [onSubmit]);
 
   useEffect(() => {
@@ -36,16 +33,9 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
         message: "invalid email address"
       }
     });
-    register({ 
-      name: "password" 
-    }, { 
-      required: true
-    });
   }, [register]);
 
   const setEmail = useCallback(value => setValue("email", value), [setValue]);
-  const setPassword = useCallback(value => setValue("password", value), [setValue]);
-
 
   const icon = loading ? 'pi-spin pi-spinner' : 'pi-md-person';
   return (
@@ -54,41 +44,32 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
           <div className="login-panel-content">
             <Grid>
                 <GridCol>
-                  <h1>Sign-in to Profilart</h1>
+                  <h1>Recover your password!</h1>
                 </GridCol>
                 <input type="hidden" value="something" />
                 <GridCol>
                   {error && (
                     <Message type={MessageType.error} summary={error.message} />
                   )}
-                  {deleted && (
-                    <Message type={MessageType.success} summary="Account successfully deleted" />
+                  {sent && (
+                    <Message onClose={closeAndRedirect} type={MessageType.success} summary="Password sent at your mail!" />
                   )}
                 </GridCol>
                 <Input
                   id="email"
                   type="email"
-                  label="email"
+                  label="Your email address"
                   keyfilter="email"
                   onChange={setEmail} 
                   error={errors.email?.message || errors.email?.type}
                 />
-                <Input
-                  id="password"
-                  label="password"
-                  type="password"
-                  onChange={setPassword} 
-                  error={errors.password?.message || errors.password?.type}
-                />
                 <GridCol>
-                  <Button disabled={loading || false} label="sign in" icon={`pi ${icon}`} />
+                  <Button disabled={loading || false} label="Ask new password" icon={`pi ${icon}`} />
                 </GridCol>
-                <p className="forgottenlink">
-                  <Link to="/forgotten-password">I forgot my password...</Link>
-                </p>
+               
                 <GridCol>
                     <GridCol6>
-                      <Link to="/register">create an account</Link>
+                      <Link to="/login">back to login form</Link>
                     </GridCol6>
                 </GridCol>
                 
@@ -100,4 +81,4 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
   )
 };
 
-export default LoginForm;
+export default ForgottenPasswordForm;

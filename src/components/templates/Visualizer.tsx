@@ -65,6 +65,8 @@ export const Visualizer: FC<VisualizerProps> = ({ error, query, result, loading 
                   <p>Reason: {error.message}</p>
                   <p>{possibleCause}</p>
                   <p>Please <Link to="/">check out your API configuration</Link> and retry.</p>
+                </GridCol12>
+                <GridCol12 className="errorsPossibles">
                   <p><Button onClick={retry} label="Retry action call" /></p>
                 </GridCol12>
               </Grid>

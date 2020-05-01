@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { Profile } from 'types/Profile';
-import { AUTHENTICATE, AUTHENTICATE_SUCCESS, AUTHENTICATE_FAIL, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_FAIL, DELETE_USER, DELETE_USER_SUCCESS, DELETE_USER_FAIL, DISCONNECT, GET_PROFILE, GET_PROFILE_SUCCESS, GET_PROFILE_FAIL, CLOSE_USER_UPDATE_NOTIF, CLOSE_USER_DELETE_NOTIF, CLOSE_USER_ERROR_NOTIF, CREATE_USER, CREATE_USER_SUCCESS, CREATE_USER_FAIL, CLOSE_USER_CREATE_NOTIF } from 'constants/user';
+import { AUTHENTICATE, AUTHENTICATE_SUCCESS, AUTHENTICATE_FAIL, UPDATE_USER, UPDATE_USER_SUCCESS, UPDATE_USER_FAIL, DELETE_USER, DELETE_USER_SUCCESS, DELETE_USER_FAIL, DISCONNECT, GET_PROFILE, GET_PROFILE_SUCCESS, GET_PROFILE_FAIL, CLOSE_USER_UPDATE_NOTIF, CLOSE_USER_DELETE_NOTIF, CLOSE_USER_ERROR_NOTIF, CREATE_USER, CREATE_USER_SUCCESS, CREATE_USER_FAIL, CLOSE_USER_CREATE_NOTIF, RECOVER_PASSWORD, RECOVER_PASSWORD_SUCCESS, RECOVER_PASSWORD_FAIL, CLOSE_USER_FORGOTTEN_PASSWORD_NOTIF } from 'constants/user';
 import { AnyAction } from 'redux';
 import { APIError } from 'types/Api';
 
@@ -13,6 +13,7 @@ export interface UserReducer {
   updated: boolean;
   deleted: boolean;
   token: string | null;
+  sent: boolean;
 }
 
 export const initialState: UserReducer = {
@@ -23,7 +24,8 @@ export const initialState: UserReducer = {
   profile: null,
   updated: false,
   deleted: false,
-  created: false
+  created: false,
+  sent: false
 }
 
 export const userReducer = handleActions(
@@ -34,7 +36,8 @@ export const userReducer = handleActions(
       authenticated: false,
       error: null,
       loading: true,
-      token: null
+      token: null,
+      sent: false
     }),
     [AUTHENTICATE_SUCCESS]: (state, { payload }: AnyAction) => ({
       ...state,
@@ -150,6 +153,28 @@ export const userReducer = handleActions(
     [CLOSE_USER_ERROR_NOTIF]: (state) => ({
       ...state,
       error: null
+    }),
+    [CLOSE_USER_FORGOTTEN_PASSWORD_NOTIF]: (state) => ({
+      ...state,
+      sent: false
+    }),
+    [RECOVER_PASSWORD]: (state) => ({
+      ...state,
+      sent: false,
+      loading: true,
+      error: null
+    }),
+    [RECOVER_PASSWORD_SUCCESS]: (state) => ({
+      ...state,
+      loading: false,
+      sent: true,
+      error: null
+    }),
+    [RECOVER_PASSWORD_FAIL]: (state, { error }: AnyAction) => ({
+      ...state,
+      loading: false,
+      sent: false,
+      error
     })
   },
   initialState

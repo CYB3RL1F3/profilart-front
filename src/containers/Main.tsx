@@ -10,6 +10,7 @@ import { MessageType } from "components/atoms/Message";
 import { UserReducer } from "reducers/user";
 import { updateProfile, closeUpdateNotification, closeErrorNotification } from 'actions/user';
 import { scrollToElementClassName } from "utils/scroll";
+import { deleteProfile } from '../actions/user';
 
 export interface Selector {
   profile: Profile | null;
@@ -17,8 +18,7 @@ export interface Selector {
 }
 
 export const Main: FC = () => {
-  const { profile, loading, updated, error } = useSelector<AppState, UserReducer>(({ user }) => user);
-
+  const { profile, loading, updated, deleted, error } = useSelector<AppState, UserReducer>(({ user }) => user);
   const dispatch = useDispatch();
 
   const onSubmit = useCallback((updatedProfile: UpdateProfileFormData) => {
@@ -35,6 +35,10 @@ export const Main: FC = () => {
     dispatch(closeErrorNotification())
   }, [dispatch]);
 
+  const deleteProfileAction = useCallback(() => {
+    if (profile) deleteProfile()
+  }, [profile]);
+
   useEffect(() => {
     if (updated || error) {
       setTimeout(() => {
@@ -42,6 +46,14 @@ export const Main: FC = () => {
       }, 100);
     }
   }, [updated, error])
+
+  useEffect(() => {
+    if (deleted) {
+      setTimeout(() => {
+        window.document.location.replace('/login');
+      }, 50);
+    }
+  }, [deleted])
 
   return (
     <PageLayout className="editPage">
@@ -55,13 +67,19 @@ export const Main: FC = () => {
           <Message onClose={closeMessage} type={MessageType.success} summary="Profile successfully updated!!" details="Your infos are now up to date." />
         )}
         {error && (
-          <Message onClose={closeError} type={MessageType.error} summary="An error occured!!" details={` ${error.message}. Checkout your informations.`} />
+          <Message onClose={closeError} type={MessageType.error} summary="A fatal error occured!!" details={` ${error.message}. Checkout your informations and retry.`} />
         )}
       </Grid>
       {profile && (
         <>
           <h4>Your profile UID: {profile.uid}</h4>
-          <ProfileForm loading={loading} onSubmit={onSubmit} defaultValues={profile} context={ProfileFormContexts.edit} />
+          <ProfileForm
+            loading={loading}
+            onSubmit={onSubmit}
+            defaultValues={profile}
+            context={ProfileFormContexts.edit} 
+            onDelete={deleteProfileAction}
+          />
         </>
       )}
       {!profile && <Message type={MessageType.error} summary="Impossible to edit inexisting profile" />}

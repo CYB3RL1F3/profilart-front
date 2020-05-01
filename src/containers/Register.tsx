@@ -29,25 +29,23 @@ export const Register: FC<RouteComponentProps> = ({ history }) => {
   const closeError = useCallback(() => {
     dispatch(closeErrorNotification())
   }, [dispatch]);
-
-  if (created) {
-    setTimeout(() => {
-      closeMessage();
-    }, 4000);
-  }
+  
   useEffect(() => {
   if (created) {
     setTimeout(() => {
       scrollToElementClassName("messages", 20);
     }, 100);
+    setTimeout(() => {
+      closeMessage(); // autoclose
+    }, 4000);
   }
-}, [created])
+}, [created, closeMessage])
 
   return (
     <PageLayout className="register">
       <Grid>
         <GridCol6>
-          <h1>Create your profile</h1>
+          <h1>Create your profile and enjoy Profilart!</h1>
         </GridCol6>
         <GridCol6>
           <p className="goback">
@@ -59,10 +57,10 @@ export const Register: FC<RouteComponentProps> = ({ history }) => {
       </Grid>
       <Grid className="messages">
         {created && (
-          <Message onClose={closeMessage} type={MessageType.success} summary="Profile successfully created!!" details="Login to check your informations." />
+          <Message onClose={closeMessage} type={MessageType.success} summary="Profile successfully created!!" details="You will be redirected. Sign in to check your informations." />
         )}
         {error && (
-          <Message onClose={closeError} type={MessageType.error} summary="An error occured!!" details="Checkout your informations." />
+          <Message onClose={closeError} type={MessageType.error} summary="A fatal error occured!!" details={`${error.message}. Checkout your informations and retry.`} />
         )}
       </Grid>
       <ProfileForm loading={loading || created} onSubmit={onSubmit} context={ProfileFormContexts.create} />

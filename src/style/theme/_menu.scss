@@ -207,6 +207,7 @@ body {
         padding: 0;
 
         .p-menubar-root-list {
+            float: left;
             > .p-menuitem {
                 > .p-menuitem-link {
                     padding: $menuitemPadding;

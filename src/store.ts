@@ -39,11 +39,16 @@ export const configureStore = (isDev: boolean) => {
     },
     onError: ( { action, error, next }: any) => {
       console.log(error.response);
-      let { code, message } = error.response?.data?.error;
+      let res = error.response && error.response.data && error.response.data?.error;
       let fromApi = true;
+      let code, message;
+      if (res) {
+        code = res.code;
+        message = res.message;
+      }
       if (!code && !message) {
-        code = error.response.status;
-        message = error.response.statusText;
+        code = error.response ? error.response.status : 500;
+        message = error.response ? error.response.statusText : "uncaught fatal exception";
         fromApi = false;
       }
       next({

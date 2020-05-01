@@ -3,12 +3,18 @@ import React, { FC, useMemo, useCallback } from "react";
 import { Menubar } from 'primereact/menubar';
 import { logout } from "actions/user";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Button } from "primereact/button";
 import { MenuItem } from "primereact/components/menuitem/MenuItem";
+import { Grid } from "components/atoms";
+import { Profile } from 'types/Profile';
+import Gravatar from "react-gravatar";
 
 export interface CommandEvent { originalEvent: Event; item: MenuItem; }
 
-export const Menu: FC<RouteComponentProps> = ({ history }) => {
+export interface MenuProps extends RouteComponentProps {
+  profile: Profile | null;
+}
+
+export const Menu: FC<MenuProps> = ({ history, profile }) => {
   const command = useCallback((e: CommandEvent) => {
     e.originalEvent.preventDefault();
     e.originalEvent.stopPropagation();
@@ -43,14 +49,26 @@ export const Menu: FC<RouteComponentProps> = ({ history }) => {
     }
   ]), [command]);
 
-  const disconnect = useCallback(async () => {
-    await logout()
+  const disconnect = useCallback(async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await logout();
   }, []);
   return (
     <div className="layout-topbar">
        <div className="layout-topbar-menu-wrapper">
         <Menubar model={items}>
-          <Button onClick={disconnect} label="Logout" icon="pi pi-sign-out" />
+          <Grid>
+            <div className="p-menu-item">
+              <a className="p-menuitem-link" href="/logout" onClick={disconnect}>
+                <span className="pi pi-sign-out" />
+                Logout 
+              </a>
+            </div>
+            {profile && profile?.email && (
+              <Gravatar className="avatar" email={profile.email} />
+            )}
+          </Grid>
         </Menubar>
       </div>
     </div>

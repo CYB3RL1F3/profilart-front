@@ -30,12 +30,15 @@ body {
         }
         
     }
-    .errorsPossibles p {
-        text-align: center;
-        width: 100%;
-        font-size: 14px;
-        line-height: 16px;
-        height: 16px;
+    .errorsPossibles {
+        margin: 15px 0;
+        & p {
+            text-align: center;
+            width: 100%;
+            font-size: 14px;
+            line-height: 16px;
+            height: 16px;
+        }
     }
     .p-inputtext {
         background: transparent no-repeat;

@@ -37,10 +37,8 @@ export const ActionBar: FC<ActionBarProps> = ({ profile, defaultSelected }) => {
     !!discogs && 
     !!discogs?.url, [discogs]);
 
-  const fetchInfos = useCallback((e) => {
-    if (canDisplayResidentAdvisor) {
-      dispatch(call(uid, "infos"));
-    }
+  const fetchInfos = useCallback(() => {
+    dispatch(call(uid, "infos"));
   }, [canDisplayResidentAdvisor, dispatch, uid]);
 
   const fetchCharts = useCallback(() => {
@@ -77,11 +75,15 @@ export const ActionBar: FC<ActionBarProps> = ({ profile, defaultSelected }) => {
     }
   }, [canDisplaySoundcloud, dispatch, uid]);
 
+  const fetchPosts = useCallback((e) => {
+    dispatch(call(uid, "posts"));
+  }, [canDisplayResidentAdvisor, dispatch, uid]);
+
   const items: MenuItem[] = useMemo(() => [
     {
       label: "Infos",
       command: fetchInfos,
-      disabled: !canDisplayResidentAdvisor
+      disabled: false
     },
     {
       label: "Charts",
@@ -107,6 +109,11 @@ export const ActionBar: FC<ActionBarProps> = ({ profile, defaultSelected }) => {
       label: "Tracks",
       command: fetchTracks,
       disabled: !canDisplaySoundcloud
+    },
+    {
+      label: "Posts",
+      command: fetchPosts,
+      disabled: false
     }
   ], [canDisplayDiscogs, canDisplayResidentAdvisor, canDisplaySoundcloud, fetchCharts, fetchForthcomingEvents, fetchInfos, fetchPastEvents, fetchReleases, fetchTracks])
   const initialItem = items.find(i => i.label?.toLocaleLowerCase() === defaultSelected) || items[0];

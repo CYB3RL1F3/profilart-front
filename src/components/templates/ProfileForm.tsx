@@ -9,6 +9,7 @@ import { PASSWORD, CONFIRM_PASSWORD, WEBSITE, RESIDENT_ADVISOR, DISCOGS, MAILER,
 import { validateResidentAdvisor } from "utils/validators";
 import { Profile, UpdateProfileFormData } from 'types/Profile';
 import { scrollToTopestElementClassName } from "utils/scroll";
+import { ConfirmDeletionModal } from "components/molecules/Modals/ConfirmDeletion";
 
 export enum ProfileFormContexts {
   edit = "edit",
@@ -18,13 +19,18 @@ export enum ProfileFormContexts {
 export interface ProfileFormProps {
   context: ProfileFormContexts;
   onSubmit: (values: UpdateProfileFormData) => void;
+  onDelete?: () => void;
   defaultValues?: Profile;
   loading: boolean;
 }
 
-export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultValues, onSubmit }) => {
+export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultValues, onSubmit, onDelete }) => {
   const isCreationForm = useMemo(() => context === ProfileFormContexts.create, [context]);
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const [deleteModalOpened, toggleDeleteModal] = useState<boolean>(false);
+  const closeDeleteModal = useCallback(() => {
+    toggleDeleteModal(false);
+  }, [toggleDeleteModal]);
   const activateAutoValidation = useCallback(() => {
     setSubmitted(true);
   }, [setSubmitted]);
@@ -56,10 +62,13 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
   const submit = useCallback((values) => {
     onSubmit(mapValues(values));
   }, [onSubmit, mapValues]);
-  const { register, handleSubmit, errors, setValue, watch, getValues } = useForm<any, any>({
+  const confirmDeletion = useCallback(() => {
+    if (onDelete) onDelete();
+  }, [onDelete]);
+  const { register, handleSubmit, errors, setValue, watch } = useForm<any, any>({
     defaultValues
   });
-  console.log(errors, "XXX", getValues(), submitted);
+  
   const doRegistration = useCallback((name: string, required: boolean, extraProps?: any) => {
     register({ 
       name
@@ -72,8 +81,8 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
   const deleteAccount = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('delete account');
-  }, []);
+    toggleDeleteModal(true);
+  }, [toggleDeleteModal]);
 
 
   const setEmail = useCallback((value: string) => setValue(EMAIL, value, submitted), [setValue]);
@@ -377,6 +386,16 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
             )}
           </GridCol>
         </GridCol6>
+        {!isCreationForm && defaultValues && (
+          <ConfirmDeletionModal
+            opened={deleteModalOpened}
+            onClose={closeDeleteModal}
+            onCancel={closeDeleteModal}
+            onConfirm={confirmDeletion}
+            uid={defaultValues.uid}
+            website={defaultValues.website}
+          />
+        )}
       </GridDashboard>
     </form>
   )
