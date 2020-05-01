@@ -1,5 +1,5 @@
 import { getHeaders, toQuery } from 'utils/api';
-import { CALL, CALL_CLOSE_ERROR, CALL_CLEAR } from 'constants/api';
+import { CALL, CALL_CLOSE_ERROR, CALL_CLEAR, GET_STATUS } from 'constants/api';
 import { Params } from 'types/Api';
 import { createAction } from 'redux-actions';
 
@@ -19,6 +19,17 @@ export const callUrl = (url: string) => ({
   payload: {
     request:{
       url,
+      method: 'get',
+      headers: getHeaders()
+    }
+  }
+})
+
+export const getStatus = () => ({
+  type: GET_STATUS,
+  payload: {
+    request:{
+      url: '/status',
       method: 'get',
       headers: getHeaders()
     }

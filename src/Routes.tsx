@@ -5,6 +5,7 @@ import PrivateRoute from "components/routes/PrivateRoute";
 import { Login, Main, Visualize, Posts, Register } from "containers";
 import { Location } from "history";
 import ForgottenPassword from "containers/ForgottenPassword";
+import { Maintenance } from './containers/Maintenance';
 export interface RoutesProps {
   authenticated: boolean;
   location: Location | null;
@@ -38,6 +39,7 @@ export const Routes: FC<RoutesProps> = ({ authenticated, location }) => {
       <Route exact path="/login" component={Login}/>
       <Route exact path="/register" component={Register}/>
       <Route exact path="/forgotten-password" component={ForgottenPassword}/>
+      <Route exact path="/maintenance" component={Maintenance}/>
     </Switch>
   )
 }
