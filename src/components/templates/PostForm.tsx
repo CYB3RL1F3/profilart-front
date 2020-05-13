@@ -160,12 +160,9 @@ export const PostForm: FC = () => {
                   </>
                 )}
               </GridCol6>
-              <GridCol6>
-                or set up media URL: <br />
-              </GridCol6>
               <Input
                 type="text"
-                label="Media URL"
+                label="Or put picture URL here"
                 disabled={uploading}
                 name={FORM_INPUT_ILLUSTRATION}
                 onChange={setIllustrationLink}

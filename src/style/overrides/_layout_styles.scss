@@ -1,5 +1,16 @@
 /* Add your customizations of layout here */
 body {
+  .credentials_alert {
+    padding: 5px;
+    margin: 0 !important;
+    letter-spacing: 0;
+    font-size: 11px;
+    .pi-md-warning {
+      width: 25px;
+      position: relative;
+      top: 2.5px;
+    }
+  }
   .p-col {
     position: relative;
     &.button_handler {

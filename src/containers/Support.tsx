@@ -2,7 +2,7 @@
 import React, { FC, useCallback, useEffect } from "react";
 import { PageLayout } from "components/layouts/PageLayout";
 import { Grid, Card, Message } from "components/atoms";
-import { GridCol12 } from "components/atoms/Grid";
+import { GridCol12, GridCol6 } from "components/atoms/Grid";
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from "react-redux";
 import { Input, Dropdown } from "components/molecules";
@@ -14,6 +14,7 @@ import { contactSupport, SupportContact, closeErrorSupport, closeSuccessSupport 
 
 import { SupportReducer } from 'reducers/support';
 import { MessageType } from "components/atoms/Message";
+import { Link } from "react-router-dom";
 
 export const Support: FC = () => {
   const { profile } = useSelector<AppState, UserReducer>(({ user }) => user);
@@ -61,28 +62,32 @@ export const Support: FC = () => {
   const setContent = useCallback((value: string) => setValue("content", value), [setValue]);
   const questions = [
     {
-      label: "Problem using the API",
-      value: "Problem using the API"
-    },
-    {
-      label: "Problem with my profile",
-      value: "Problem with my profile"
-    },
-    {
-      label: "Problem with data fetched",
-      value: "Problem with data fetched"
-    },
-    {
-      label: "Other Bug report",
-      value: "Other Bug report",
-    },
-    {
       label: "Authentication problems",
       value: "Authentication problems",
     },
     {
+      label: "Problem using the API",
+      value: "Problem using the API"
+    },
+    {
+      label: "Problem with my profile data",
+      value: "Problem with my profile data"
+    },
+    {
+      label: "Problem with data I receive",
+      value: "Problem with data I receive"
+    },
+    {
+      label: "Problem with my newsfeed",
+      value: "Problem with my newsfeed"
+    },
+    {
       label: "Problem with cache",
       value: "Problem with cache",
+    },
+    {
+      label: "Other Bug report",
+      value: "Other Bug report",
     },
     {
       label: "Other question",
@@ -93,9 +98,18 @@ export const Support: FC = () => {
   return (
     <PageLayout className="support">
       <Grid>
-        <GridCol12>
+        <GridCol6>
           <h1>Contact us for support!</h1>
-        </GridCol12>
+        </GridCol6>
+        {!profile && (
+          <GridCol6>
+            <p className="goback">
+              <Link to="/login">
+                back to login form
+              </Link>
+            </p>
+          </GridCol6>
+        )}
       </Grid>
       <form onSubmit={handleSubmit(submit)}>
         <Grid>
@@ -116,14 +130,14 @@ export const Support: FC = () => {
                 name="email"
                 label="your email"
                 defaultValue={profile?.email}
-                disabled
+                disabled={!!profile && !!profile.email}
               />
               <Input
                 type="email"
                 name="email"
                 label="your name"
                 defaultValue={profile?.artistName}
-                disabled
+                disabled={!!profile && !!profile.artistName}
               />
               <Dropdown value={watch("question")} options={questions} onChange={setQuestion} filter={true} filterPlaceholder="Search your question" filterBy="label" placeholder="Select a question"/>
               <Textarea

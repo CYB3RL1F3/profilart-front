@@ -184,7 +184,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
       <GridDashboard>
         <GridCol6>
           <GridCol>
-            <Card title="General informations">
+            <Card title="General informations*">
               <GridCol12>
                 <Input
                   id={EMAIL}
@@ -218,7 +218,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
             </Card>
           </GridCol>
           <GridCol>
-            <Card title="Authentication informations">
+            <Card title="Authentication informations*">
               <GridCol12>
                 {!isCreationForm && (
                   <Input
@@ -279,6 +279,30 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
         </GridCol6>
         <GridCol6>
           <GridCol>
+            <Card title="Your main information sources">
+              <GridCol12>
+                <Input
+                  id={SOUNDCLOUD.URL}
+                  type="text"
+                  label="Soundcloud"
+                  defaultValue={defaultValues?.soundcloud?.url}
+                  name={SOUNDCLOUD.URL}
+                  onChange={setSoundcloud}
+                  error={errors.soundcloud?.url?.message || errors.soundcloud?.url?.type}
+                />
+                <Input
+                  id={DISCOGS.URL}
+                  type="text"
+                  defaultValue={defaultValues?.discogs?.url}
+                  label="Discogs" 
+                  name={DISCOGS.URL}
+                  onChange={setDiscogs}
+                  error={errors.discogs?.url?.message || errors.discogs?.url?.type}
+                />
+              </GridCol12>
+            </Card>
+          </GridCol>
+          <GridCol>
             <Card title="Resident Advisor API Credentials">
               <GridCol12>
                 <Input
@@ -307,30 +331,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
                   onChange={setUserId}
                   error={errors.residentAdvisor?.userId?.message || errors.residentAdvisor?.userId?.type}
                 />
-              </GridCol12>
-            </Card>
-          </GridCol>
-          <GridCol>
-            <Card title="Other information sources">
-              <GridCol12>
-                <Input
-                  id={SOUNDCLOUD.URL}
-                  type="text"
-                  label="Soundcloud"
-                  defaultValue={defaultValues?.soundcloud?.url}
-                  name={SOUNDCLOUD.URL}
-                  onChange={setSoundcloud}
-                  error={errors.soundcloud?.url?.message || errors.soundcloud?.url?.type}
-                />
-                <Input
-                  id={DISCOGS.URL}
-                  type="text"
-                  defaultValue={defaultValues?.discogs?.url}
-                  label="Discogs" 
-                  name={DISCOGS.URL}
-                  onChange={setDiscogs}
-                  error={errors.discogs?.url?.message || errors.discogs?.url?.type}
-                />
+                <p className="credentials_alert"><span className="pi pi-md-warning" />We need your credentials to consume RA API to get charts and events. Be sure that your credentials are encrypted and will never be published or used outside the service.</p>
               </GridCol12>
             </Card>
           </GridCol>

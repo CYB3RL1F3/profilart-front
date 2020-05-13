@@ -49,7 +49,7 @@ export const Posts: FC = () => {
             <h1>Your personal newsfeed</h1>
           </GridCol6>
           <GridCol6 className="button_handler">
-            <Button className="p-button-info" onClick={openForm} label="Create post" icon="pi pi-plus" />
+            <Button className="p-button-success" onClick={openForm} label="Create post" icon="pi pi-plus" />
           </GridCol6>
         </GridCol12>
       </Grid>
