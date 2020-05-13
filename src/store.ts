@@ -15,6 +15,7 @@ export const configureStore = (isDev: boolean) => {
     onSuccess: ({ action, response, next }: any) => {
       console.log(action, response);
       const { data } = response;
+      console.log(data);
       if (action.type === AUTHENTICATE) {
         if (data.authenticated) {
           sessionService.saveSession(data);
@@ -28,6 +29,7 @@ export const configureStore = (isDev: boolean) => {
           });
         }
       } else {
+        console.log(`${action.type}_SUCCESS`);
         next({
           type: `${action.type}_SUCCESS`,
           payload: data,
@@ -67,7 +69,6 @@ export const configureStore = (isDev: boolean) => {
   
   const composeEnhancers = (isDev && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose; 
 
-  // @ts-ignore
   const enhancer = composeEnhancers(
     applyMiddleware(
       axiosMiddleware(client, axiosMiddlewareConfig)

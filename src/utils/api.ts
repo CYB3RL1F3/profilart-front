@@ -23,3 +23,10 @@ export const getHeaders = <Options = {}>(toBeAuthenticated?: boolean, extraOptio
 }
 
 export const toQuery = (params?: Params) => params ? `?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}` : ''
+
+export const toBase64 = (file: Blob) => new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+});

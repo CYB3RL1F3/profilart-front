@@ -4,7 +4,7 @@ import { Card } from "components/atoms";
 import { Input, Checkbox, Slider } from "components/molecules";
 import { useForm } from "react-hook-form";
 import { GridDashboard, GridCol6, GridCol, GridCol12 } from "components/atoms/Grid";
-import { Button } from "primereact/button";
+import { Button } from "primereact-working/button";
 import { PASSWORD, CONFIRM_PASSWORD, WEBSITE, RESIDENT_ADVISOR, DISCOGS, MAILER, CACHE, CURRENT_PASSWORD, ARTIST_NAME, EMAIL, SOUNDCLOUD } from 'constants/profileForm';
 import { validateResidentAdvisor } from "utils/validators";
 import { Profile, UpdateProfileFormData } from 'types/Profile';
@@ -69,7 +69,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
     defaultValues
   });
   
-  const doRegistration = useCallback((name: string, required: boolean, extraProps?: any) => {
+  const registerInput = useCallback((name: string, required: boolean, extraProps?: any) => {
     register({ 
       name
     }, { 
@@ -108,61 +108,61 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
   const setResidentAdvisorCacheTTL = useCallback((value: number) => setValue(CACHE.TTL.RA, value, submitted), [setValue]);
   
   useEffect(() => {
-    doRegistration(EMAIL, true, {
+    registerInput(EMAIL, true, {
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
         message: "invalid email address"
       }
     });
-    doRegistration(WEBSITE, true, {
+    registerInput(WEBSITE, true, {
       validate: (value: string) => !value || /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/gmi.test(value) ? true : "invalid URL"
     });
-    doRegistration(ARTIST_NAME, true, {
+    registerInput(ARTIST_NAME, true, {
       min: 2
     });
 
-    doRegistration(PASSWORD, false, {
+    registerInput(PASSWORD, false, {
       validate: (value: string) => !value || /^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=_]).*$/gm.test(value) ? true : "Requires at least 8 chars, including 1 major, 1 number and 1 special"
     });
-    doRegistration(CONFIRM_PASSWORD, false, {
+    registerInput(CONFIRM_PASSWORD, false, {
       validate: (value: string) => value === watch(isCreationForm ? CURRENT_PASSWORD : PASSWORD) ? true : `Must match with your ${isCreationForm ? 'password' : 'new password'}`
     });
-    doRegistration(CURRENT_PASSWORD, false);
+    registerInput(CURRENT_PASSWORD, false);
     
-    doRegistration(RESIDENT_ADVISOR.ACCESS_KEY, false, {
+    registerInput(RESIDENT_ADVISOR.ACCESS_KEY, false, {
       validate: {
         allSet: (value: string) => !!value || (!value && validateResidentAdvisor(watch(RESIDENT_ADVISOR.DJID), value, watch(RESIDENT_ADVISOR.USER_ID))) ? true : "All Resident Advisor API infos must be set"
       }
     });
-    doRegistration(RESIDENT_ADVISOR.DJID, false, {
+    registerInput(RESIDENT_ADVISOR.DJID, false, {
       validate: {
         allSet: (value: string) => !!value || (!value && validateResidentAdvisor(value, watch(RESIDENT_ADVISOR.ACCESS_KEY), watch(RESIDENT_ADVISOR.USER_ID))) ? true : "All Resident Advisor API infos must be set",
         mustBeNumber: (value: string) => !value || /[0-9]*/gm.test(value) ? true : "Can only be a number"
       }
     });
-    doRegistration(RESIDENT_ADVISOR.USER_ID, false, {
+    registerInput(RESIDENT_ADVISOR.USER_ID, false, {
       validate: {
         allSet: (value: string) => !!value || (!value && validateResidentAdvisor(watch(RESIDENT_ADVISOR.DJID), watch(RESIDENT_ADVISOR.ACCESS_KEY), value)) ? true : "All Resident Advisor API infos must be set",
         mustBeNumber: (value: string) => !value || /[0-9]*/gm.test(value) ? true : "Can only be a number"
       }
     });
 
-    doRegistration(SOUNDCLOUD.URL, false, {
+    registerInput(SOUNDCLOUD.URL, false, {
       validate: (value: string) => !value || /^(?:https?:\/\/)?(soundcloud.com\/)[a-zA-Z0-9\-_.]*/gmi.test(value) ? true : "invalid Soundcloud artist page URL"
     });
-    doRegistration(DISCOGS.URL, false, {
+    registerInput(DISCOGS.URL, false, {
       validate: (value: string) => !value || /^(?:https?:\/\/)(www\.)?(discogs\.com\/artist\/)[a-zA-Z0-9\-_.].*/gmi.test(value) ? true :  "invalid Discogs artist page URL"
     });
-    doRegistration(MAILER.RECIPIENT, false, {
+    registerInput(MAILER.RECIPIENT, false, {
       validate: {
         isValid: (value: string) => !value || /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? true : "Invalid email address",
         canBeEmpty: (value: string) => !value || (!!value && !!watch(MAILER.PREFIX) ? true : "You can't define prefix without recipient")
       }
     });
-    doRegistration(CACHE.USE, false);
-    doRegistration(CACHE.TTL.DISCOGS, false);
-    doRegistration(CACHE.TTL.RA, false);
-    doRegistration(CACHE.TTL.SOUNDCLOUD, false);
+    registerInput(CACHE.USE, false);
+    registerInput(CACHE.TTL.DISCOGS, false);
+    registerInput(CACHE.TTL.RA, false);
+    registerInput(CACHE.TTL.SOUNDCLOUD, false);
 
   }, []);
 

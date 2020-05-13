@@ -15,7 +15,7 @@ declare global {
             api: any;
             getLoginStatus: (arg: (response: any) => any) => void;
         };
-        __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: (a: any, b: any) => void;
+        __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: <R>(a: R) => R;
     }
     interface Navigator {
         userLanguage: string;

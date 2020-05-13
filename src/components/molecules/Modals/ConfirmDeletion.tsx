@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from "react";
-import { Button } from "primereact/button";
-import {Dialog} from 'primereact/dialog';
+import { Button } from "primereact-working/button";
+import { Dialog } from 'primereact-working/dialog';
 import { Grid } from "components/atoms";
 
 export interface ConfirmDeletionModalProps {

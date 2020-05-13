@@ -1,9 +1,9 @@
 import React, { FC, useMemo, useCallback } from "react";
-// import { TabMenu } from 'primereact/tabmenu';
-import { Menubar } from 'primereact/menubar';
+// import { TabMenu } from 'primereact-working/tabmenu';
+import { Menubar } from 'primereact-working/menubar';
 import { logout } from "actions/user";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { MenuItem } from "primereact/components/menuitem/MenuItem";
+import { MenuItem } from "primereact-working/components/menuitem/MenuItem";
 import { Grid } from "components/atoms";
 import { Profile } from 'types/Profile';
 import Gravatar from "react-gravatar";
@@ -36,7 +36,7 @@ export const Menu: FC<MenuProps> = ({ history, profile }) => {
       command
     },
     {
-      label: 'Manage posts',
+      label: 'Manage newsfeed',
       icon: 'pi pi-md-web',
       url: '/posts',
       command

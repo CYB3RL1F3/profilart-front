@@ -5,8 +5,8 @@ import { useDispatch } from "react-redux";
 import { call } from '../../actions/api';
 import { Grid } from "components/atoms";
 import { GridCol12 } from "components/atoms/Grid";
-import { TabMenu } from 'primereact/tabmenu';
-import { MenuItem } from "primereact/components/menuitem/MenuItem";
+import { TabMenu } from 'primereact-working/tabmenu';
+import { MenuItem } from "primereact-working/components/menuitem/MenuItem";
 
 export interface ActionBarProps {
   profile: Profile;

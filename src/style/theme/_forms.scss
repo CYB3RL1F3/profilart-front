@@ -92,12 +92,19 @@ body {
         }
     }
 
+    .txtarea {
+        margin-top: 20px;
+    }
+
     .md-inputfield {
         display: block;
         position:relative;
         min-height: 40px;
-        > input {
+        > input, > textarea {
             width: 100%;
+        }
+        > textarea {
+            padding-top: 20px;
         }
         > label {
             color:#999;

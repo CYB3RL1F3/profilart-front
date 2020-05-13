@@ -1,100 +1,168 @@
 import { handleActions } from 'redux-actions';
-import { GET_POSTS, GET_POSTS_SUCCESS, GET_POSTS_FAIL, UPDATE_POST, UPDATE_POST_FAIL, UPDATE_POST_SUCCESS, CREATE_POST, CREATE_POST_SUCCESS, CREATE_POST_FAIL, DELETE_POST, DELETE_POST_SUCCESS, DELETE_POST_FAIL } from 'constants/post';
+import { GET_POSTS, GET_POSTS_SUCCESS, GET_POSTS_FAIL, UPDATE_POST, UPDATE_POST_FAIL, UPDATE_POST_SUCCESS, CREATE_POST, CREATE_POST_SUCCESS, CREATE_POST_FAIL, DELETE_POST, DELETE_POST_SUCCESS, DELETE_POST_FAIL, MODAL_OPEN, MODAL_CLOSE, CLOSE_POSTS_NOTIF, CLOSE_POSTS_ERROR } from 'constants/post';
 import { Post } from 'types/Posts';
 import { AnyAction } from 'redux';
+import { APIError } from 'types/Api';
 
 export interface PostsReducer {
-    posts: Post[];
-    success: boolean;
-    loading: boolean;
-    error: boolean | undefined;
+  posts: Post[];
+  addSuccess: boolean;
+  updateSuccess: boolean;
+  deleteSuccess: boolean;
+  loading: boolean;
+  error: APIError;
+  modal: {
+    opened: boolean;
+    new: boolean;
+    postId: string | null;
+  }
 }
 
 export const initialState: PostsReducer = {
-    posts: [],
-    success: false,
-    loading: false,
-    error: false
+  posts: [],
+  addSuccess: false,
+  updateSuccess: false,
+  deleteSuccess: false,
+  loading: false,
+  error: null,
+  modal: {
+    opened: false,
+    new: false,
+    postId: null
+  }
 };
 
-export const apiReducer = handleActions({
-  [GET_POSTS]: () => ({
+export const postsReducer = handleActions({
+  [GET_POSTS]: (state) => ({
+    ...state,
     posts: [],
-    success: false,
+    addSuccess: false,
     loading: true,
-    error: false
+    error: null
   }),
   [GET_POSTS_SUCCESS]: (state, { payload }: AnyAction) => ({
+    ...state,
     posts: payload,
-    success: true,
     loading: false,
-    error: false
+    error: null
   }),
-  [GET_POSTS_FAIL]: (state, { error }) => ({
+  [GET_POSTS_FAIL]: (state, { error }: AnyAction) => ({
+    ...state,
     error,
     posts: [],
-    success: false,
+    addSuccess: false,
     loading: false
   }),
   [CREATE_POST]: (state) => ({
+    ...state,
     posts: state.posts,
-    success: false,
+    addSuccess: false,
+    updateSuccess: false,
+    deleteSuccess: false,
     loading: true,
-    error: false
+    error: null
   }),
   [CREATE_POST_SUCCESS]: (state, { payload }: AnyAction) => ({
+    ...state,
     posts: [
       ...state.posts,
-      payload
+      payload.posts
     ],
-    success: true,
+    modal: initialState.modal,
+    addSuccess: true,
+    updateSuccess: false,
+    deleteSuccess: false,
     loading: false,
-    error: false
+    error: null
   }),
-  [CREATE_POST_FAIL]: (state, { error }) => ({
+  [CREATE_POST_FAIL]: (state, { error }: AnyAction) => ({
     ...state,
     error,
-    success: false,
+    addSuccess: false,
+    updateSuccess: false,
+    deleteSuccess: false,
     loading: false
   }),
   [UPDATE_POST]: (state) => ({
+    ...state,
     posts: state.posts,
-    success: false,
+    updateSuccess: false,
+    addSuccess: false,
+    deleteSuccess: false,
     loading: true,
-    error: false
+    error: null
   }),
   [UPDATE_POST_SUCCESS]: (state, { payload }: AnyAction) => ({
-      posts: state.posts.map(p => p._id === payload._id ? payload : p),
-      success: true,
-      loading: false,
-      error: false
-    }),
-  [UPDATE_POST_FAIL]: (state, { error }) => ({
+    ...state,
+    posts: state.posts.map(p => p._id === payload.posts._id ? payload.posts : p),
+    modal: initialState.modal,
+    updateSuccess: true,
+    addSuccess: false,
+    deleteSuccess: false,
+    loading: false,
+    error: null
+  }),
+  [UPDATE_POST_FAIL]: (state, { error }: AnyAction) => ({
     ...state,
     error,
-    success: false,
+    updateSuccess: false,
+    addSuccess: false,
+    deleteSuccess: false,
     loading: false
   }),
   [DELETE_POST]: (state) => ({
-    posts: state.posts,
-    success: false,
+    ...state,
+    addSuccess: false,
+    updateSuccess: false,
+    deleteSuccess: false,
     loading: true,
-    error: false
+    error: null
   }),
   [DELETE_POST_SUCCESS]: (state, { payload }: AnyAction) => {
     return {
-      posts: state.posts.filter(p => p._id !== payload.id),
-      success: true,
+      ...state,
+      posts: state.posts.filter(p => p._id !== payload.posts._id),
+      deleteSuccess: true,
+      addSuccess: false,
+      updateSuccess: false,
       loading: false,
-      error: false
+      error: null
     }
   },
-  [DELETE_POST_FAIL]: (state, { error }) => ({
+  [DELETE_POST_FAIL]: (state, { error }: AnyAction) => ({
     ...state,
     error,
-    success: false,
+    deleteSuccess: false,
+    addSuccess: false,
+    updateSuccess: false,
     loading: false
+  }),
+  [CLOSE_POSTS_NOTIF]: (state) => ({
+    ...state,
+    addSuccess: false,
+    updateSuccess: false,
+    deleteSuccess: false,
+  }),
+  [CLOSE_POSTS_ERROR]: (state) => ({
+    ...state,
+    error: null
+  }),
+  [MODAL_OPEN]: (state, { payload }: AnyAction) => ({
+    ...state,
+    modal: {
+      opened: true,
+      new: payload.isNew,
+      postId: payload.postId
+    }
+  }),
+  [MODAL_CLOSE]: (state) => ({
+    ...state,
+    modal: {
+      opened: false,
+      new: false,
+      postId: null
+    }
   })
 }, initialState);
 
-export default apiReducer;
+export default postsReducer;

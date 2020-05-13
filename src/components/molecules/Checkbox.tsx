@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from "react";
-import {Checkbox as CheckboxComponent} from 'primereact/checkbox';
+import {Checkbox as CheckboxComponent} from 'primereact-working/checkbox';
 import { GridCol } from 'components/atoms/Grid';
 
 export interface CheckboxProps {

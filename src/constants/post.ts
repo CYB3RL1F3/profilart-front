@@ -13,3 +13,14 @@ export const UPDATE_POST_FAIL: "POST/UPDATE_FAIL" = "POST/UPDATE_FAIL";
 export const DELETE_POST: "POST/DELETE" = "POST/DELETE";
 export const DELETE_POST_SUCCESS: "POST/DELETE_SUCCESS" = "POST/DELETE_SUCCESS";
 export const DELETE_POST_FAIL: "POST/DELETE_FAIL" = "POST/DELETE_FAIL";
+
+export const MODAL_OPEN: "POST/MODAL_OPEN" = "POST/MODAL_OPEN";
+export const MODAL_CLOSE: "POST/MODAL_CLOSE" = "POST/MODAL_CLOSE";
+
+export const CLOSE_POSTS_NOTIF: "POST/CLOSE_NOTIF" = "POST/CLOSE_NOTIF";
+export const CLOSE_POSTS_ERROR: "POST/CLOSE_POSTS_ERROR" = "POST/CLOSE_POSTS_ERROR";
+export const FORM_INPUT_TITLE: "title" = "title";
+export const FORM_INPUT_SUBTITLE: "subtitle" = "subtitle";
+export const FORM_INPUT_CONTENT: "content" = "content";
+export const FORM_INPUT_ILLUSTRATION: "illustration" = "illustration";
+export const FORM_INPUT_PUBLISHED: "published" = "published";

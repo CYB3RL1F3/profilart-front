@@ -1,8 +1,8 @@
 import React, { FC, useCallback, ReactElement, useState } from "react";
-import { InputText } from "primereact-working/inputtext";
+import { InputTextarea } from "primereact-working/inputtextarea";
 import { GridCol } from "components/atoms/Grid";
 const uuid = require('react-uuid');
-export interface InputProps {
+export interface TextareaProps {
   id?: string;
   label: string;
   value?: string;
@@ -17,9 +17,11 @@ export interface InputProps {
   reference?: any;
   error?: string | ReactElement<any, string> | any;
   onChange?: (value: string) => void;
+  rows: number;
+  autoResize?: boolean;
 }
 
-export const Input: FC<InputProps> = ({ id = uuid(), autoComplete, disableAutofill = false, error, name, reference, label, value, defaultValue, required, onChange, keyfilter=/.*/gmi, disabled=false, type = "text" }) => {
+export const Textarea: FC<TextareaProps> = ({ id = uuid(), rows, autoResize, autoComplete, disableAutofill = false, error, name, reference, label, value, defaultValue, required, onChange, keyfilter=/.*/gmi, disabled=false, type = "text" }) => {
   const updateValue = useCallback((e) => {
     onChange && onChange(e.target.value);
   }, [onChange]);
@@ -27,8 +29,8 @@ export const Input: FC<InputProps> = ({ id = uuid(), autoComplete, disableAutofi
   const unlock = useCallback(() => setReadonly(false), [setReadonly]);
   return (
     <GridCol>
-      <span className="md-inputfield">
-        <InputText 
+      <span className="md-inputfield txtarea">
+        <InputTextarea 
           className={error ? 'p-error' : ''}
           type={type} 
           readOnly={readonly}
@@ -44,6 +46,8 @@ export const Input: FC<InputProps> = ({ id = uuid(), autoComplete, disableAutofi
           error={error}
           autoComplete={autoComplete}
           onChange={updateValue}
+          rows={rows}
+          autoResize={autoResize}
         />
         <label htmlFor={id}>
           {label}
@@ -56,4 +60,4 @@ export const Input: FC<InputProps> = ({ id = uuid(), autoComplete, disableAutofi
   )
 }
 
-export default Input
+export default Textarea;

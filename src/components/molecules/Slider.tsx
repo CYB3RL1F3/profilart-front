@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from "react";
-import { Slider as SliderComponent} from 'primereact/slider';
+import { Slider as SliderComponent} from 'primereact-working/slider';
 import { GridCol } from 'components/atoms/Grid';
 import classNames from 'classnames';
 

@@ -1,13 +1,13 @@
 import React, { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from 'primereact/button';
+import { Button } from 'primereact-working/button';
 import { Input } from "components/molecules";
 import { Credentials } from "types/Profile";
 import { Grid, GridCol } from 'components/atoms/Grid';
 import Message, { MessageType } from "components/atoms/Message";
 import { Link } from "react-router-dom";
 import { APIError } from 'types/Api';
-import { GridCol6 } from 'components/atoms/Grid';
+import { GridCol12 } from 'components/atoms/Grid';
 export interface LoginFormProps {
   onSubmit: (credentials: Credentials) => void;
   deleted?: boolean;
@@ -87,9 +87,9 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
                   <Link to="/forgotten-password">I forgot my password...</Link>
                 </p>
                 <GridCol>
-                    <GridCol6>
+                    <GridCol12>
                       <Link to="/register">create an account</Link>
-                    </GridCol6>
+                    </GridCol12>
                 </GridCol>
                 
             </Grid>

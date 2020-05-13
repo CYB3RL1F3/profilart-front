@@ -1,10 +1,10 @@
 import React, { FC, useCallback } from "react";
 import { Grid, Card, Message } from "components/atoms";
-import {ProgressBar} from 'primereact/progressbar';
+import {ProgressBar} from 'primereact-working/progressbar';
 import ReactJson from 'react-json-view';
 import { MessageType } from "components/atoms/Message";
 import { Link } from "react-router-dom";
-import { Button } from "primereact/button";
+import { Button } from "primereact-working/button";
 import { useDispatch } from "react-redux";
 import { callUrl } from "actions/api";
 import { GridCol12 } from "components/atoms/Grid";

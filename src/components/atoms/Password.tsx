@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from "react";
-import { Password } from "primereact/password";
+import { Password } from "primereact-working/password";
 const uuid = require('react-uuid');
 export interface InputProps {
   id?: string;

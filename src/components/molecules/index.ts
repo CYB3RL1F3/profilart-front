@@ -2,3 +2,8 @@ export { default as Input } from "./Input";
 export { default as Menu } from "./Menu";
 export { default as Checkbox } from "./Checkbox";
 export { default as Slider } from "./Slider";
+export { default as Dropdown } from './DropDown';
+export { default as LoadingPosts } from './LoadingPosts';
+export { default as PostComponent } from './Post';
+export { default as Editor } from './Editor';
+export { default as Switch } from './Switch';

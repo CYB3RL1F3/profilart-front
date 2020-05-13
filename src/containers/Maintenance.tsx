@@ -9,17 +9,21 @@ import { getStatus } from "actions/api";
 
 export interface MaintenanceSelector {
   active: boolean;
+  loading: boolean;
 }
 
+let hasTriggered = false;
 export const Maintenance: FC = () => {
   const dispatch = useDispatch();
   useEffect(() => {
+    hasTriggered = true;
     dispatch(getStatus());
   }, []);
-  const { active } = useSelector<AppState, MaintenanceSelector>(({ api }) => ({
-    active: api.active
+  const { active, loading } = useSelector<AppState, MaintenanceSelector>(({ api }) => ({
+    active: api.active,
+    loading: api.loading
   }));
-  if (active) {
+  if (active && !loading && hasTriggered) {
     return (
       <Redirect
         to="/login"
@@ -50,3 +54,5 @@ export const Maintenance: FC = () => {
     </div>
   )
 }
+
+export default Maintenance;

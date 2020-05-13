@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from 'primereact/button';
+import { Button } from 'primereact-working/button';
 import { Input } from "components/molecules";
 import { Grid, GridCol } from 'components/atoms/Grid';
 import Message, { MessageType } from "components/atoms/Message";
