@@ -1,4 +1,22 @@
-/* Add your customizations of layout here */
+@keyframes toolbar_apparition {
+  from {
+    transform: translateY(-70px);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.layout-wrapper .layout-main .layout-topbar {
+  transform: translateY(-70px);
+  opacity: 0.5;
+  animation: toolbar_apparition 0.25s forwards;
+  animation-delay: 0.1s;
+}
+
+
 body {
   .credentials_alert {
     padding: 5px;
@@ -66,6 +84,7 @@ body {
       & .actions {
         display: flex;
         flex: 1;
+        max-width: 125px;
         flex-direction: column;
         margin: 0 0.5rem;
         & .message__handle {
@@ -87,4 +106,121 @@ body {
       
     }
   }
+}
+
+body {
+  .p-menubar {
+    .p-menuitem {
+      &.selected {
+          background-color: #e8e8e8;
+          & a.p-menuitem-link {
+              color: #000;
+              & .p-menuitem-icon {
+                color: #000;
+              }
+          }
+      }
+    }
+  }
+}
+
+@keyframes visualizer-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.card.visualizer {
+    width: 100%;
+    margin: 10px 0;
+    min-height: 60vh;
+    .react-json-view {
+      opacity: 0;
+      animation: visualizer-appear 0.1s linear forwards;
+      animation-delay: 0.05s;
+    }
+}
+
+@keyframes dataview-appear {
+  from {
+    max-height: 1px;
+  }
+  to {
+    max-height: 1000000px;
+  }
+}
+
+.p-dataview.p-component.p-dataview-list, .support .p-grid, .visualizer-grid, .editPage, .register {
+  overflow: hidden;
+  max-height: 0px;
+  animation: dataview-appear 250s linear forwards;
+  animation-delay: 0.25s;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+.postsPage, .support, .visualizePage {
+  opacity: 0;
+  animation: appear 0.25s linear forwards;
+  animation-delay: 0.1s;
+}
+
+@keyframes login-appear {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.login-panel, .exception-panel {
+  transform: scale(0.5);
+  opacity: 0;
+  animation: login-appear 0.25s ease-out forwards;
+  animation-delay: 0.1s;
+}
+
+footer {
+  width: 100vw;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  a {
+      text-decoration: underline;
+      color: black;
+  }
+}
+
+.layout-content footer {
+  position: relative;
+  top: 20px;
+}
+
+.postlistcontent {
+  width: 100%;
+  padding: 5px 14px;
+}
+
+.support h1 {
+  letter-spacing: 0;
+}
+
+.button_query {
+  float: right;
+  position: relative;
+  top: -8px;
 }

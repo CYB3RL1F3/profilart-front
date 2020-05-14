@@ -14,7 +14,7 @@ export interface MenuProps extends RouteComponentProps {
   profile: Profile | null;
 }
 
-export const Menu: FC<MenuProps> = ({ history, profile }) => {
+export const Menu: FC<MenuProps> = ({ history, location, profile }) => {
   const command = useCallback((e: CommandEvent) => {
     e.originalEvent.preventDefault();
     e.originalEvent.stopPropagation();
@@ -26,28 +26,32 @@ export const Menu: FC<MenuProps> = ({ history, profile }) => {
       label: 'My profile',
       icon: 'pi pi-user-edit',
       url: '/',
-      command
+      command,
+      className: location.pathname === "/" ? "selected" : ""
       
     },
     {
       label: 'Test API',
       icon: 'pi pi-eye',
       url: '/visualize',
-      command
+      command,
+      className: location.pathname === "/visualize" ? "selected" : ""
     },
     {
       label: 'Manage newsfeed',
       icon: 'pi pi-md-web',
       url: '/posts',
-      command
+      command,
+      className: location.pathname === "/posts" ? "selected" : ""
     },
     {
       label: 'Contact support',
       icon: 'pi pi-envelope',
       url: '/support',
-      command
+      command,
+      className: location.pathname === "/support" ? "selected" : ""
     }
-  ]), [command]);
+  ]), [command, location]);
 
   const disconnect = useCallback(async (e) => {
     e.preventDefault();

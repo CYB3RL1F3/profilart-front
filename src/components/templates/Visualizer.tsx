@@ -41,12 +41,15 @@ export const Visualizer: FC<VisualizerProps> = ({ error, query, result, loading 
     }
   }
   return (
-    <Grid>
+    <Grid className="visualizer-grid">
       <GridCol12>
         <h4 className="visualizer_query">
           {query !== BASE_URL && query !== "" && (
             <>Query: <code>{query}</code></>
           )}
+          <span className="button_query">
+            <Button label="Retry" onClick={retry} />
+          </span>
         </h4>
         <hr />
         {loading && (
@@ -64,7 +67,7 @@ export const Visualizer: FC<VisualizerProps> = ({ error, query, result, loading 
                 <GridCol12 className="errorsPossibles">
                   <p>Reason: {error.message}</p>
                   <p>{possibleCause}</p>
-                  <p>Please <Link to="/">check out your API configuration</Link> and retry.</p>
+                  <p>Please <Link to="/">check out my API configuration</Link> and retry.</p>
                 </GridCol12>
                 <GridCol12 className="errorsPossibles">
                   <p><Button onClick={retry} label="Retry action call" /></p>

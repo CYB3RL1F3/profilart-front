@@ -13,10 +13,11 @@ import { Visualizer } from "components/templates/Visualizer";
 import { ActionBar } from "components/templates/ActionBar";
 import { BASE_URL } from 'constants/api';
 import { call } from "actions/api";
+import { Footer } from "components/molecules";
 
 export const Visualize: FC = () => {
   const { error, loading, result, url } = useSelector<AppState, ApiReducer>(({ api }) => api);
-  const query = useMemo(() => `${BASE_URL}${url.replace(BASE_URL, '')}`, [url]);
+  const query = useMemo(() => `${BASE_URL}${url.replace(BASE_URL, '')}`.replace('fr//', 'fr/'), [url]);
   const { profile } = useSelector<AppState, UserReducer>(({ user }) => user);
   const dispatch = useDispatch();
   const firstAvailable = useMemo(() => {
@@ -32,21 +33,22 @@ export const Visualize: FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (!profile) return (
-     <PageLayout>
+     <PageLayout className="visualizePage">
       <Grid>
         <Message type={MessageType.error} summary="Impossible to run this page" details="A profile must be provided" />
       </Grid>
     </PageLayout>
   )
   return (
-    <PageLayout>
+    <PageLayout className="visualizePage">
       <Grid>
         <GridCol6>
-          <h1>Test your API connection</h1>
+          <h1>Test my API service</h1>
         </GridCol6>
       </Grid>
       <ActionBar defaultSelected={firstAvailable} profile={profile} />
       <Visualizer query={query} result={result} loading={loading} error={error} />
+      <Footer />
     </PageLayout>
   )
 }

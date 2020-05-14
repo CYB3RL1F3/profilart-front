@@ -49,8 +49,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
     }
     const currentEmail = `${defaultValues?.email}`;
     if (!isCreationForm && currentEmail) {
-      values.totalReplace = (values.password === "" && values.newPassword === "" && values.email === currentEmail);
-      console.log(currentEmail, values.email, currentEmail && values.email !== currentEmail);
+      values.totalReplace = !values.password && !values.newPassword && values.email === currentEmail;
       if (currentEmail && values.email !== currentEmail) {
         values.newEmail = values.email;
         values.email = currentEmail;
@@ -156,9 +155,10 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
     registerInput(MAILER.RECIPIENT, false, {
       validate: {
         isValid: (value: string) => !value || /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? true : "Invalid email address",
-        canBeEmpty: (value: string) => !value || (!!value && !!watch(MAILER.PREFIX) ? true : "You can't define prefix without recipient")
+        canBeEmpty: (value: string) => !!value || (!value && !watch(MAILER.PREFIX) ? true : "You can't define prefix without recipient")
       }
     });
+    registerInput(MAILER.PREFIX, false);
     registerInput(CACHE.USE, false);
     registerInput(CACHE.TTL.DISCOGS, false);
     registerInput(CACHE.TTL.RA, false);
@@ -184,7 +184,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
       <GridDashboard>
         <GridCol6>
           <GridCol>
-            <Card title="General informations*">
+            <Card title="General informations*" className="delay-1-s">
               <GridCol12>
                 <Input
                   id={EMAIL}
@@ -218,7 +218,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
             </Card>
           </GridCol>
           <GridCol>
-            <Card title="Authentication informations*">
+            <Card title="Authentication informations*" className="delay-2-s">
               <GridCol12>
                 {!isCreationForm && (
                   <Input
@@ -252,7 +252,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
             </Card>
           </GridCol>
           <GridCol>
-            <Card title="Mailer configuration">
+            <Card title="Mailer configuration" className="delay-3-s">
               <p>Configure your recipient for contact emails form through Profilart.</p>
               <GridCol12>
                 <Input
@@ -279,7 +279,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
         </GridCol6>
         <GridCol6>
           <GridCol>
-            <Card title="Your main information sources">
+            <Card title="Your main information sources" className="delay-1-s">
               <GridCol12>
                 <Input
                   id={SOUNDCLOUD.URL}
@@ -303,7 +303,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
             </Card>
           </GridCol>
           <GridCol>
-            <Card title="Resident Advisor API Credentials">
+            <Card title="Resident Advisor API Credentials" className="delay-2-s">
               <GridCol12>
                 <Input
                   id={RESIDENT_ADVISOR.ACCESS_KEY}
@@ -336,8 +336,8 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
             </Card>
           </GridCol>
           <GridCol>
-            <Card title="API Cache configuration">
-              <p>You can parameter cache to improve API performance</p>
+            <Card title="API Cache configuration" className="delay-3-s">
+              <p>You can activate a cache to improve API performances.</p>
               <GridCol12>
                 <Checkbox
                   id={CACHE.USE}

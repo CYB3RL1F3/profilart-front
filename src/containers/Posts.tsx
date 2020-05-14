@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { PostsReducer } from 'reducers/posts';
 import { AppState } from "reducers";
 import { UserReducer } from 'reducers/user';
-import { LoadingPosts } from 'components/molecules';
+import { LoadingPosts, Footer } from 'components/molecules';
 import { PostsList } from 'components/templates/PostsList';
 import { getPosts, closePostNotif, openFormModal } from "actions/post";
 import { PageLayout } from "components/layouts/PageLayout";
@@ -46,7 +46,7 @@ export const Posts: FC = () => {
       <Grid>
         <GridCol12 className="p-grid">
           <GridCol6>
-            <h1>Your personal newsfeed</h1>
+            <h1>My personal newsfeed</h1>
           </GridCol6>
           <GridCol6 className="button_handler">
             <Button className="p-button-success" onClick={openForm} label="Create post" icon="pi pi-plus" />
@@ -70,12 +70,13 @@ export const Posts: FC = () => {
           <Message onClose={closeMessage} type={MessageType.success} summary="Post successfully deleted!" />
         )}
       </Grid>
-      <Grid className="messages">
+      <Grid className="postlistcontent">
         <Suspense fallback={<LoadingPosts />}>
           <PostsList posts={getFetchedPosts} />
         </Suspense>
       </Grid>
       {modal.opened && (<PostForm />)}
+      <Footer />
     </PageLayout>
   );
 }

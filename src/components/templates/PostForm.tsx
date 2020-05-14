@@ -54,8 +54,9 @@ export const PostForm: FC = () => {
     });
   }, [register]);
 
-  const published = watch(FORM_INPUT_PUBLISHED, false);
-  const submitLabel = useMemo(() => published ? "Publish" : "Save Draft", [published]);
+  let published = watch(FORM_INPUT_PUBLISHED, currentPost?.published);
+  console.log(currentPost?.published);
+  const submitLabel = useMemo(() => published ? (!!currentPost ? "Update" : "Publish") : "Save Draft", [published]);
 
   useEffect(() => {
     registerInput(FORM_INPUT_TITLE, true);

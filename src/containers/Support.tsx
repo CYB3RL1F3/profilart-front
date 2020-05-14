@@ -5,7 +5,7 @@ import { Grid, Card, Message } from "components/atoms";
 import { GridCol12, GridCol6 } from "components/atoms/Grid";
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from "react-redux";
-import { Input, Dropdown } from "components/molecules";
+import { Input, Dropdown, Footer } from "components/molecules";
 import { AppState } from 'reducers';
 import { UserReducer } from 'reducers/user';
 import Textarea from "components/molecules/Textarea";
@@ -99,7 +99,7 @@ export const Support: FC = () => {
     <PageLayout className="support">
       <Grid>
         <GridCol6>
-          <h1>Contact us for support!</h1>
+          <h1>Need help?</h1>
         </GridCol6>
         {!profile && (
           <GridCol6>
@@ -114,7 +114,7 @@ export const Support: FC = () => {
       <form onSubmit={handleSubmit(submit)}>
         <Grid>
           <GridCol12>
-            <h3>In case you need, we can bring any assistance! What's your question?</h3>
+            <h3>We can bring any assistance! What's your question?</h3>
             <br />
           {success && (
             <Message onClose={closeMessage} type={MessageType.success} summary="Profile successfully updated!!" details="Your infos are now up to date." />
@@ -154,6 +154,7 @@ export const Support: FC = () => {
           </GridCol12>
         </Grid>
       </form>
+      <Footer />
     </PageLayout>
   )
 }

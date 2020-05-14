@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from 'primereact-working/button';
-import { Input } from "components/molecules";
+import { Input, Footer } from "components/molecules";
 import { Credentials } from "types/Profile";
 import { Grid, GridCol } from 'components/atoms/Grid';
 import Message, { MessageType } from "components/atoms/Message";
@@ -95,6 +95,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
             </Grid>
           </div>
       </form>
+      <Footer />
     </div>
 
   )

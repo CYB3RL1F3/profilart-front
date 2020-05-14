@@ -11,6 +11,7 @@ import { AppState } from "reducers";
 import { UserReducer } from "reducers/user";
 import { MessageType } from "components/atoms/Message";
 import { scrollToElementClassName } from "utils/scroll";
+import { Footer } from "components/molecules";
 
 export const Register: FC<RouteComponentProps> = ({ history }) => {
   const dispatch = useDispatch();
@@ -64,6 +65,7 @@ export const Register: FC<RouteComponentProps> = ({ history }) => {
         )}
       </Grid>
       <ProfileForm loading={loading || created} onSubmit={onSubmit} context={ProfileFormContexts.create} />
+      <Footer />
     </PageLayout>
   )
 };

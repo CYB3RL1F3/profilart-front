@@ -1,12 +1,11 @@
 import React, { FC, useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from 'primereact-working/button';
-import { Input } from "components/molecules";
-import { Grid, GridCol } from 'components/atoms/Grid';
+import { Input, Footer } from "components/molecules";
+import { Grid, GridCol, GridCol12 } from 'components/atoms/Grid';
 import Message, { MessageType } from "components/atoms/Message";
 import { Link } from "react-router-dom";
 import { APIError } from 'types/Api';
-import { GridCol6 } from 'components/atoms/Grid';
 export interface ForgottenPasswordFormProps {
   onSubmit: (email: string) => void;
   sent?: boolean;
@@ -68,14 +67,15 @@ export const ForgottenPasswordForm: FC<ForgottenPasswordFormProps> = ({ onSubmit
                 </GridCol>
                
                 <GridCol>
-                    <GridCol6>
+                    <GridCol12>
                       <Link to="/login">back to login form</Link>
-                    </GridCol6>
+                    </GridCol12>
                 </GridCol>
                 
             </Grid>
           </div>
       </form>
+      <Footer />
     </div>
 
   )

@@ -11,6 +11,7 @@ import { UserReducer } from "reducers/user";
 import { updateProfile, closeUpdateNotification, closeErrorNotification } from 'actions/user';
 import { scrollToElementClassName } from "utils/scroll";
 import { deleteProfile } from '../actions/user';
+import { Footer } from "components/molecules";
 
 export interface Selector {
   profile: Profile | null;
@@ -59,7 +60,7 @@ export const Main: FC = () => {
     <PageLayout className="editPage">
       <Grid>
         <GridCol6>
-          <h1>Edit your profile</h1>
+          <h1>Edit my profile</h1>
         </GridCol6>
       </Grid>
       <Grid className="messages">
@@ -72,7 +73,7 @@ export const Main: FC = () => {
       </Grid>
       {profile && (
         <>
-          <h4>Your profile UID: {profile.uid}</h4>
+          <h4>My profile UID: {profile.uid}</h4>
           <ProfileForm
             loading={loading}
             onSubmit={onSubmit}
@@ -83,7 +84,7 @@ export const Main: FC = () => {
         </>
       )}
       {!profile && <Message type={MessageType.error} summary="Impossible to edit inexisting profile" />}
-      
+      <Footer />
     </PageLayout>
   );
 }

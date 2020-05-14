@@ -7,3 +7,4 @@ export { default as LoadingPosts } from './LoadingPosts';
 export { default as PostComponent } from './Post';
 export { default as Editor } from './Editor';
 export { default as Switch } from './Switch';
+export { default as Footer } from './Footer';
