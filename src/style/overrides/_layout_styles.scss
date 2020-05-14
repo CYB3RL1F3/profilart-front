@@ -153,6 +153,14 @@ body {
   }
 }
 
+.visualizer-grid {
+  min-height: 60vh;
+}
+
+.support form {
+  min-height: 75vh;
+}
+
 .p-dataview.p-component.p-dataview-list, .support .p-grid, .visualizer-grid, .editPage, .register {
   overflow: hidden;
   max-height: 0px;
@@ -205,14 +213,21 @@ footer {
   }
 }
 
-.layout-content footer {
-  position: relative;
-  top: 20px;
+.layout-content {
+  min-height: 100vh;
+  footer {
+    position: relative;
+    top: 20px;
+  }
 }
 
 .postlistcontent {
   width: 100%;
+  min-height: 50vh;
   padding: 5px 14px;
+  & > .p-grid {
+    width: 100%;
+  }
 }
 
 .support h1 {
