@@ -28,14 +28,14 @@ export const Root: FC<AppProps> = ({ history }) => {
     profile: user.profile
   }));
   return (
-    <AppLayout>
-        <Router history={history}>
+    <Router history={history}>
+      <AppLayout>
           { authenticated && (
             <Menu profile={profile} />
           )}
           <Routes authenticated={authenticated} location={location} />
-        </Router>
-    </AppLayout>
+      </AppLayout>
+    </Router>
   );
 };
 

@@ -566,8 +566,15 @@ body {
         }
 
         .p-panelmenu-panel {
-            margin-bottom: 1px;
-
+            margin-bottom: 10px;
+            &.selected {
+                .p-panelmenu-header {
+                    background-color: #8bc34a;
+                    & .p-menuitem-text, .p-menuitem-icon {
+                        color: #25291e;
+                    }
+                }
+            }
             &:first-child {
                 .p-panelmenu-header {
                     @include corner-top;

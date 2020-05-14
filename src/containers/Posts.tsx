@@ -59,6 +59,7 @@ export const Posts: FC = () => {
           <p>Your feed actually contains <strong>{posts.length} posts</strong>{drafts.length > 0 ? `, including ${drafts.length} drafts.` : "."}</p>
         )}
       </Grid>
+      
       <Grid className="messages">
         {addSuccess && (
           <Message onClose={closeMessage} type={MessageType.success} summary="Post successfully added!" />
@@ -69,6 +70,12 @@ export const Posts: FC = () => {
         {deleteSuccess && (
           <Message onClose={closeMessage} type={MessageType.success} summary="Post successfully deleted!" />
         )}
+      </Grid>
+
+      <Grid className="button_handler_mobile">
+        <GridCol12>
+          <Button onClick={openForm} label="Create post" icon="pi pi-plus" />
+        </GridCol12>
       </Grid>
       <Grid className="postlistcontent">
         <Suspense fallback={<LoadingPosts />}>

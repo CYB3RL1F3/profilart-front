@@ -139,7 +139,7 @@ export const Support: FC = () => {
                 defaultValue={profile?.artistName}
                 disabled={!!profile && !!profile.artistName}
               />
-              <Dropdown value={watch("question")} options={questions} onChange={setQuestion} filter={true} filterPlaceholder="Search your question" filterBy="label" placeholder="Select a question"/>
+              <Dropdown value={watch("question")} options={questions} onChange={setQuestion} filter filterPlaceholder="Search your question" filterBy="label" placeholder="Select a question"/>
               <Textarea
                 label="your message"
                 onChange={setContent}

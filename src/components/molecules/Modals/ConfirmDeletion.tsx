@@ -33,7 +33,7 @@ export const ConfirmDeletionModal: FC<ConfirmDeletionModalProps> = ({ opened, ui
     </div>
   );
   return (
-    <Dialog header="ARE YOU REALLY SURE THAT YOU WANT TO DELETE YOUR PROFILE?" footer={Footer} visible={opened} style={{width: '60vw', minWidth: '750px'}} modal={true} onHide={onClose}>
+    <Dialog header="ARE YOU REALLY SURE THAT YOU WANT TO DELETE YOUR PROFILE?" footer={Footer} visible={opened} modal={true} onHide={onClose}>
       <Grid className="deletion">
         <h1><span className="pi pi-md-warning" />This action is <strong>IRREVERSIBLE!!</strong></h1>
         <p>After doing this, <strong>it won't be possible to rollback.</strong> All data stored on our databases, including <strong>your UID, email, password, API routes and credentials are simply <u>ERASED</u></strong>, in accordance with GPDR and general conditions of use.</p>
