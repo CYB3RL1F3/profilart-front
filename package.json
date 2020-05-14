@@ -21,7 +21,9 @@
     "classnames": "^2.2.6",
     "cloudinary-core": "^2.8.2",
     "cloudinary-react": "^1.5.0",
+    "compression": "^1.7.4",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "history": "^4.10.1",
     "html-react-parser": "^0.10.3",
     "node-sass": "^4.14.1",
@@ -50,11 +52,14 @@
     "redux-thunk": "^2.3.0",
     "resolve": "^1.17.0",
     "sanitize-html": "^1.23.0",
+    "serve-static": "^1.14.1",
+    "spdy": "^4.0.2",
     "styled-components": "^5.1.0",
     "typescript": "3.9.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node ./server.js",
+    "start:dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
