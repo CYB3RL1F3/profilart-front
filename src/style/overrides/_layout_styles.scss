@@ -341,7 +341,12 @@ footer {
   }
 }
 
-div.layout-content.postsPage > div.p-grid.button_handler_mobile > div > button {
-  width: calc(100% - 15px);
-  margin: 0 8px;
+div.layout-content.postsPage > div.p-grid.button_handler_mobile {
+  @media(min-width: 961px) {
+    display: none;
+  }
+  & > div > button {
+    width: calc(100% - 15px);
+    margin: 0 8px;
+  }
 }
