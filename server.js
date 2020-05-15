@@ -4,6 +4,16 @@ const path = require('path');
 
 const fs = require('fs');
 const compression = require('compression');
+const routes = {
+  main: "/",
+  visualize: "/visualize",
+  posts: "/posts",
+  support: "/support",
+  login: "/login",
+  register: "/register",
+  forgottenPassword: "/forgotten-password",
+  maintenance: "/maintenance"
+}
 
 let app = express();
 
@@ -27,6 +37,16 @@ app.get('*.css', gzip);
 app.use(compression());
 
 app.use(express.static(path.join(__dirname, 'build')));
+
+Object.keys(routes).forEach((r) => {
+  app.get(routes[r], (req,res) => {
+    res.status(200).sendFile(path.join(__dirname+'/build/index.html'));
+});
+})
+app.get('*', (req,res) => {
+    res.status(404).sendFile(path.join(__dirname+'/build/index.html'));
+});
+
 const port = process.env.PORT || '8080';
 app.set('port', port);
 const server = http.createServer(app).listen(port, (error) => {
