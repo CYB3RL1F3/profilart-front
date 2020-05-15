@@ -41,8 +41,13 @@ app.use(express.static(path.join(__dirname, 'build')));
 Object.keys(routes).forEach((r) => {
   app.get(routes[r], (req,res) => {
     res.status(200).sendFile(path.join(__dirname+'/build/index.html'));
+  });
 });
+
+app.get('/.well-known/acme-challenge/qWHw1paoNtJpB92bih07wXQkGEYzovzjWIqauTqUXUY', (req, res) => {
+  res.status(200).sendFile(path.join(__dirname+'/build/qWHw1paoNtJpB92bih07wXQkGEYzovzjWIqauTqUXUY'))
 })
+
 app.get('*', (req,res) => {
     res.status(404).sendFile(path.join(__dirname+'/build/index.html'));
 });
