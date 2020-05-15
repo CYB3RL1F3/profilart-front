@@ -44,8 +44,9 @@ Object.keys(routes).forEach((r) => {
   });
 });
 
-app.get('/.well-known/acme-challenge/qWHw1paoNtJpB92bih07wXQkGEYzovzjWIqauTqUXUY', (req, res) => {
-  res.status(200).sendFile(path.join(__dirname+'/build/qWHw1paoNtJpB92bih07wXQkGEYzovzjWIqauTqUXUY'))
+app.get('/.well-known/acme-challenge/:id', (req, res) => {
+  res.contentType("text/plain"); 
+  res.status(200).sendFile(path.join(`${__dirname}/build/${req.params.id}`));
 })
 
 app.get('*', (req,res) => {
