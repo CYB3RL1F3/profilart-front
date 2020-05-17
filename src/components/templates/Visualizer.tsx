@@ -66,9 +66,11 @@ export const Visualizer: FC<VisualizerProps> = ({ error, query, result, loading 
                   <Message type={MessageType.error} summary="An error occured!" details="This query is failing." />
                 </GridCol12>
                 <GridCol12 className="errorsPossibles">
+                  {error.code.toString() === "500" && (<p>The service is actually broken!</p>)}
                   <p>Reason: {error.message}</p>
-                  <p>{possibleCause}</p>
-                  <p>Please <Link to={paths.main}>check out your API configuration</Link> and retry.</p>
+                  {error.code.toString() === "500" && (<p>Our team is actually working on it. Please be patient and retry later.</p>)}
+                  {error.code.toString() === "400" && (<p>{possibleCause}</p>)}
+                  {error.code.toString() === "400" && (<p>Please <Link to={paths.main}>check out your API configuration</Link> and retry.</p>)}
                 </GridCol12>
                 <GridCol12 className="errorsPossibles">
                   <p><Button onClick={retry} label="Retry action call" /></p>

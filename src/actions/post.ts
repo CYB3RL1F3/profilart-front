@@ -29,6 +29,21 @@ export const getPosts = (uid: string) => (
   }
 )
 
+
+
+export const getAllPosts = () => (
+  {
+    type: GET_POSTS,
+    payload: {
+      request:{
+        url: `/posts`,
+        method: 'get',
+        headers: getHeaders(true)
+      }
+    }
+  }
+)
+
 export const createPost = (post: CreatePost) => (
   {
     type: CREATE_POST,

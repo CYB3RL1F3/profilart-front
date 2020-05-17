@@ -112,7 +112,7 @@ export const PostForm: FC = () => {
   }, [currentPost, dispatch, profile]);
 
   return (
-    <Dialog onHide={hide} visible={modal.opened} header={header}>
+    <Dialog baseZIndex={10000000000} onHide={hide} visible={modal.opened} header={header}>
       <form className="post_editor" onSubmit={handleSubmit(submit)}>
         <GridDashboard>
           <GridCol>
