@@ -12,6 +12,7 @@ import { updateProfile, closeUpdateNotification, closeErrorNotification } from '
 import { scrollToElementClassName } from "utils/scroll";
 import { deleteProfile } from '../actions/user';
 import { Footer } from "components/molecules";
+import paths from "paths";
 
 export interface Selector {
   profile: Profile | null;
@@ -51,7 +52,7 @@ export const Main: FC = () => {
   useEffect(() => {
     if (deleted) {
       setTimeout(() => {
-        window.document.location.replace('/login');
+        window.document.location.replace(paths.login);
       }, 50);
     }
   }, [deleted])

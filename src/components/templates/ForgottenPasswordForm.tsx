@@ -6,6 +6,7 @@ import { Grid, GridCol, GridCol12 } from 'components/atoms/Grid';
 import Message, { MessageType } from "components/atoms/Message";
 import { Link } from "react-router-dom";
 import { APIError } from 'types/Api';
+import paths from "paths";
 export interface ForgottenPasswordFormProps {
   onSubmit: (email: string) => void;
   sent?: boolean;
@@ -68,7 +69,7 @@ export const ForgottenPasswordForm: FC<ForgottenPasswordFormProps> = ({ onSubmit
                
                 <GridCol>
                     <GridCol12>
-                      <Link to="/login">back to login form</Link>
+                      <Link to={paths.login}>back to login form</Link>
                     </GridCol12>
                 </GridCol>
                 

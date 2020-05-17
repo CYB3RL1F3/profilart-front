@@ -6,10 +6,11 @@ import Root from 'Root';
 import { getSessionValidator } from 'utils/session';
 import "./index.css";
 import "./window";
+import paths from 'paths';
 
 const options = {
     refreshOnCheckAuth: true,
-    redirectPath: '/login',
+    redirectPath: paths.login,
     driver: 'LOCALSTORAGE',
     validateSession: getSessionValidator(store)
 };

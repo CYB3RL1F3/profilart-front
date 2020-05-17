@@ -10,6 +10,7 @@ import { callUrl } from "actions/api";
 import { GridCol12 } from "components/atoms/Grid";
 import { BASE_URL } from 'constants/api';
 import { APIError } from 'types/Api';
+import paths from "paths";
 export interface VisualizerProps {
   query: string;
   result: Object | null;
@@ -67,7 +68,7 @@ export const Visualizer: FC<VisualizerProps> = ({ error, query, result, loading 
                 <GridCol12 className="errorsPossibles">
                   <p>Reason: {error.message}</p>
                   <p>{possibleCause}</p>
-                  <p>Please <Link to="/">check out your API configuration</Link> and retry.</p>
+                  <p>Please <Link to={paths.main}>check out your API configuration</Link> and retry.</p>
                 </GridCol12>
                 <GridCol12 className="errorsPossibles">
                   <p><Button onClick={retry} label="Retry action call" /></p>

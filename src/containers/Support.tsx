@@ -15,6 +15,7 @@ import { contactSupport, SupportContact, closeErrorSupport, closeSuccessSupport 
 import { SupportReducer } from 'reducers/support';
 import { MessageType } from "components/atoms/Message";
 import { Link } from "react-router-dom";
+import paths from "paths";
 
 export const Support: FC = () => {
   const { profile } = useSelector<AppState, UserReducer>(({ user }) => user);
@@ -104,7 +105,7 @@ export const Support: FC = () => {
         {!profile && (
           <GridCol6>
             <p className="goback">
-              <Link to="/login">
+              <Link to={paths.login}>
                 back to login form
               </Link>
             </p>

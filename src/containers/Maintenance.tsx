@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppState } from 'reducers';
 import { Redirect } from "react-router-dom";
 import { getStatus } from "actions/api";
+import paths from 'paths';
 
 export interface MaintenanceSelector {
   active: boolean;
@@ -26,7 +27,7 @@ export const Maintenance: FC = () => {
   if (active && !loading && hasTriggered) {
     return (
       <Redirect
-        to="/login"
+        to={paths.login}
       />
     )
   }

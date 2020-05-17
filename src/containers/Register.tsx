@@ -12,6 +12,7 @@ import { UserReducer } from "reducers/user";
 import { MessageType } from "components/atoms/Message";
 import { scrollToElementClassName } from "utils/scroll";
 import { Footer } from "components/molecules";
+import paths from "paths";
 
 export const Register: FC<RouteComponentProps> = ({ history }) => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export const Register: FC<RouteComponentProps> = ({ history }) => {
   const closeMessage = useCallback(() => {
     dispatch(closeCreateNotification());
     setTimeout(() => {
-      history.push('/login');
+      history.push(paths.login);
     }, 250);
   }, [dispatch, history]);
 
@@ -50,7 +51,7 @@ export const Register: FC<RouteComponentProps> = ({ history }) => {
         </GridCol6>
         <GridCol6>
           <p className="goback">
-            <Link to="/login">
+            <Link to={paths.login}>
               back to login form
             </Link>
           </p>

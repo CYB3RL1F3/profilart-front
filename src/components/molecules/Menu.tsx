@@ -9,6 +9,7 @@ import { Grid } from "components/atoms";
 import { PanelMenu } from 'primereact-working/panelmenu';
 import { Profile } from 'types/Profile';
 import Gravatar from "react-gravatar";
+import paths from "paths";
 
 export interface CommandEvent { originalEvent: Event; item: MenuItem; }
 
@@ -17,7 +18,6 @@ export interface MenuProps extends RouteComponentProps {
 }
 
 export const Menu: FC<MenuProps> = ({ history, location, profile }) => {
-
 
   const [visible, toggle] = useState<boolean>(false);
 
@@ -32,39 +32,41 @@ export const Menu: FC<MenuProps> = ({ history, location, profile }) => {
   const command = useCallback((e: CommandEvent) => {
     e.originalEvent.preventDefault();
     e.originalEvent.stopPropagation();
-     history.push(e.item.url || "/");
+     history.push(e.item.url || paths.main);
      close();
   }, [history, close]);
+
+  const getClassName = (path: string) => location.pathname === path ? "selected" : ""
 
   const items: MenuItem[] = useMemo(() => ([
     {
       label: 'My profile',
       icon: 'pi pi-user-edit',
-      url: '/',
+      url: paths.main,
       command,
-      className: location.pathname === "/" ? "selected" : ""
+      className: getClassName(paths.main)
       
     },
     {
       label: 'Test API',
       icon: 'pi pi-eye',
-      url: '/visualize',
+      url: paths.visualize,
       command,
-      className: location.pathname === "/visualize" ? "selected" : ""
+      className: getClassName(paths.visualize)
     },
     {
       label: 'Manage newsfeed',
       icon: 'pi pi-md-web',
-      url: '/posts',
+      url: paths.posts,
       command,
-      className: location.pathname === "/posts" ? "selected" : ""
+      className: getClassName(paths.posts)
     },
     {
       label: 'Contact support',
       icon: 'pi pi-envelope',
-      url: '/support',
+      url: paths.support,
       command,
-      className: location.pathname === "/support" ? "selected" : ""
+      className: getClassName(paths.support)
     }
   ]), [command, location]);
 

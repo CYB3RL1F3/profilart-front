@@ -8,6 +8,7 @@ import ForgottenPassword from "containers/ForgottenPassword";
 import Maintenance from './containers/Maintenance';
 import Err404 from "containers/Err404";
 import { Support } from "containers/Support";
+import paths from "paths";
 export interface RoutesProps {
   authenticated: boolean;
   location: Location | null;
@@ -19,30 +20,30 @@ export const Routes: FC<RoutesProps> = ({ authenticated, location }) => {
     <Switch>
       <PrivateRoute
           exact
-          path="/"
+          path={paths.main}
           component={ Main }
           authenticated={authenticated}
           location={location}
       />
       <PrivateRoute
           exact
-          path="/visualize"
+          path={paths.visualize}
           component={ Visualize }
           authenticated={authenticated}
           location={location}
       />
       <PrivateRoute
           exact
-          path="/posts"
+          path={paths.posts}
           component={ Posts }
           authenticated={authenticated}
           location={location}
       />
-      <Route exact path="/support" component={Support}/>
-      <Route exact path="/login" component={Login}/>
-      <Route exact path="/register" component={Register}/>
-      <Route exact path="/forgotten-password" component={ForgottenPassword}/>
-      <Route exact path="/maintenance" component={Maintenance}/>
+      <Route exact path={paths.support} component={Support}/>
+      <Route exact path={paths.login} component={Login}/>
+      <Route exact path={paths.register} component={Register}/>
+      <Route exact path={paths.forgottenPassword} component={ForgottenPassword}/>
+      <Route exact path={paths.maintenance} component={Maintenance}/>
       <Route component={Err404}/>
     </Switch>
   )

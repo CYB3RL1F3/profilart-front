@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { recoverPassword, closeForgottenPasswordNotification } from 'actions/user';
 import { AppState } from 'reducers';
 import { APIError } from 'types/Api';
+import paths from 'paths';
 
 export interface ForgottenPasswordSelector {
   error: APIError;
@@ -22,7 +23,7 @@ export const ForgottenPassword: FC = () => {
   const closeAndRedirect = () => {
     dispatch(closeForgottenPasswordNotification());
     setTimeout(() => {
-      window.document.location.href = "/login";
+      window.document.location.href = paths.login;
     }, 100);
   }
   const { error, sent, loading } = useSelector<AppState, ForgottenPasswordSelector>(({ user }) => ({

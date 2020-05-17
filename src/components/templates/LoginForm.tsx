@@ -8,6 +8,7 @@ import Message, { MessageType } from "components/atoms/Message";
 import { Link } from "react-router-dom";
 import { APIError } from 'types/Api';
 import { GridCol12 } from 'components/atoms/Grid';
+import paths from "paths";
 export interface LoginFormProps {
   onSubmit: (credentials: Credentials) => void;
   deleted?: boolean;
@@ -88,7 +89,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onSubmit, loading, deleted, erro
                 </p>
                 <GridCol>
                     <GridCol12>
-                      <Link to="/register">create an account</Link>
+                      <Link to={paths.register}>create an account</Link>
                     </GridCol12>
                 </GridCol>
                 

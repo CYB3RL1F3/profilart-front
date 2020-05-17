@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { Location } from "history";
+import paths from "paths";
 
 export interface PrivateRouteProps {
   component: FC<any>;
@@ -19,7 +20,7 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ location, component, exact = fals
         React.createElement(component, props)
       ) : (
         <Redirect to={{
-            pathname: '/login',
+            pathname: paths.login,
             state: { from: location }
         }}/>
       )

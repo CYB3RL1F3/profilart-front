@@ -8,6 +8,7 @@ import { AppState } from 'reducers';
 import { Redirect } from "react-router-dom";
 import { APIError } from 'types/Api';
 import { getStatus } from 'actions/api';
+import paths from "paths";
 
 export interface LoginSelector {
   authenticated: boolean;
@@ -38,14 +39,14 @@ export const Login: FC = () => {
   if (!active && !loading) {
     return (
       <Redirect to={{
-          pathname: '/maintenance'
+          pathname: paths.maintenance
       }}/>
     )
   }
   if (authenticated) {
     return (
       <Redirect to={{
-          pathname: '/'
+          pathname: paths.main
       }}/>
     )
   }
