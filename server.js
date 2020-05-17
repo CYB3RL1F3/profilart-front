@@ -4,6 +4,7 @@ const path = require('path');
 
 const fs = require('fs');
 const compression = require('compression');
+const sslRedirect = require("heroku-ssl-redirect");
 const routes = {
   main: "/",
   visualize: "/visualize",
@@ -15,7 +16,16 @@ const routes = {
   maintenance: "/maintenance"
 }
 
+const appFile = path.join(__dirname+'/build/index.html');
+
 let app = express();
+
+const port = process.env.PORT || '8080';
+app.set('port', port);
+if (port !== 3000 && port !== 3001 && port !== 8080) {
+  app.use(sslRedirect());
+}
+app.enable("trust proxy");
 
 const hasGzip = (fileName) => {
   return fs.existsSync(`../dist${fileName}.gz`);
@@ -40,16 +50,15 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 Object.keys(routes).forEach((r) => {
   app.get(routes[r], (req,res) => {
-    res.status(200).sendFile(path.join(__dirname+'/build/index.html'));
+    res.status(200).sendFile(appFile);
   });
 });
 
 app.get('*', (req,res) => {
-    res.status(404).sendFile(path.join(__dirname+'/build/index.html'));
+    res.status(404).sendFile(appFile);
 });
 
-const port = process.env.PORT || '8080';
-app.set('port', port);
+
 const server = http.createServer(app).listen(port, (error) => {
   if (error) {
     console.error(error);
