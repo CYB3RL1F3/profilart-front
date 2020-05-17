@@ -7,9 +7,11 @@ import { AppState } from 'reducers';
 import { Redirect } from "react-router-dom";
 import { getStatus } from "actions/api";
 import paths from 'paths';
+import { APIError } from 'types/Api';
 
-export interface MaintenanceSelector {
+interface MaintenanceSelector {
   active: boolean;
+  error: APIError;
   loading: boolean;
 }
 
@@ -20,10 +22,7 @@ export const Maintenance: FC = () => {
     hasTriggered = true;
     dispatch(getStatus());
   }, []);
-  const { active, loading } = useSelector<AppState, MaintenanceSelector>(({ api }) => ({
-    active: api.active,
-    loading: api.loading
-  }));
+  const { active, loading, error } = useSelector<AppState, MaintenanceSelector>(({ api }) => api);
   if (active && !loading && hasTriggered) {
     return (
       <Redirect
@@ -43,11 +42,20 @@ export const Maintenance: FC = () => {
                   <h1>Profilart is not available right now!</h1>
                 </GridCol>
                 <input type="hidden" value="something" />
-                <GridCol>
-                  <h3>The service is actually down.</h3> 
-                  <br />
-                  <p>Our team is actually hard working to restablish it as soon as possible. We're absolutely sorry for the inconveniance...</p>
-                </GridCol>
+                {error && error.code === 429 && (
+                  <GridCol>
+                    <h3>Your IP address is temporary blocked!!</h3> 
+                    <br />
+                    <p>Seems you tried to make too many requests... Please wait a bit, then retry!</p>
+                  </GridCol>
+                )}
+                {error && error.code !== 429 && (
+                  <GridCol>
+                    <h3>The service is actually down.</h3> 
+                    <br />
+                    <p>Our team is actually hard working to restablish it as soon as possible. We're absolutely sorry for the inconveniance...</p>
+                  </GridCol>
+                )}
                 
             </Grid>
           </div>

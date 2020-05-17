@@ -17,6 +17,26 @@ const routes = {
 }
 
 const appFile = path.join(__dirname+'/build/index.html');
+const Ddos = require("ddos");
+
+// DDOS protection
+const ddos = new Ddos({
+  burst: 20,
+  limit: 80,
+  maxexpiry: 30,
+  trustProxy: true,
+  onDenial: (req) => {
+    const ip =
+      req.headers["x-forwarded-for"] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      (req.connection.socket ? req.connection.socket.remoteAddress : null);
+    req.res.status(429).end(
+        `<h1>You're temporary blocked! Too many request with IP ${ip}</h1>`
+    );
+  }
+});
+
 
 let app = express();
 
@@ -41,10 +61,13 @@ const gzip = (req, res, next) => {
   }
 };
 
+app.use(ddos.express);
+
 app.get('*.js', gzip);
 app.get('*.css', gzip);
 
 app.use(compression());
+
 
 app.use(express.static(path.join(__dirname, 'build')));
 
