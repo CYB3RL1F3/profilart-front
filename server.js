@@ -44,11 +44,6 @@ Object.keys(routes).forEach((r) => {
   });
 });
 
-app.get('/.well-known/acme-challenge/:id', (req, res) => {
-  res.contentType("text/plain"); 
-  res.status(200).sendFile(path.join(`${__dirname}/build/${req.params.id}`));
-})
-
 app.get('*', (req,res) => {
     res.status(404).sendFile(path.join(__dirname+'/build/index.html'));
 });

@@ -11,13 +11,13 @@ const {
 
 export const config = {
   cloud: {
-    url: REACT_APP_CLOUDINARY_ENDPOINT || "https://api.cloudinary.com/v1_1/hw2jydiif",
-    cloud_name: REACT_APP_CLOUDINARY_SERVER || "hw2jydiif",
-    api_key: REACT_APP_CLOUDINARY_API_KEY || "891429771893345",
-    api_secret: REACT_APP_CLOUDINARY_SECRET || "Rr5TYQWMCB9cxASxbth6nT7-m4w",
-    preset: REACT_APP_CLOUDINARY_PRESET || "bcvh9q4a"
+    url: REACT_APP_CLOUDINARY_ENDPOINT as string,
+    cloud_name: REACT_APP_CLOUDINARY_SERVER as string,
+    api_key: REACT_APP_CLOUDINARY_API_KEY as string,
+    api_secret: REACT_APP_CLOUDINARY_SECRET as string,
+    preset: REACT_APP_CLOUDINARY_PRESET as string
   },
-  api: REACT_APP_API_ENDPOINT || "https://profilart.fr/"
+  api: REACT_APP_API_ENDPOINT as string
 }
 
 export default config;
