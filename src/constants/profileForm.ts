@@ -9,7 +9,8 @@ export const RESIDENT_ADVISOR = {
   USER_ID: "residentAdvisor.userId"
 };
 export const SOUNDCLOUD = {
-  URL: "soundcloud.url"
+  URL: "soundcloud.url",
+  PLAYLISTS: "soundcloud.playlists"
 };
 export const DISCOGS = {
   URL: "discogs.url"

@@ -1,5 +1,5 @@
 import { getHeaders, toQuery } from 'utils/api';
-import { CALL, CALL_CLOSE_ERROR, CALL_CLEAR, GET_STATUS } from 'constants/api';
+import { CALL, CALL_CLOSE_ERROR, CALL_CLEAR, GET_STATUS, REFETCH } from 'constants/api';
 import { Params } from 'types/Api';
 import { createAction } from 'redux-actions';
 
@@ -39,3 +39,14 @@ export const getStatus = () => ({
 export const closeApiNotificationError = createAction(CALL_CLOSE_ERROR);
 
 export const clear = createAction(CALL_CLEAR);
+
+export const refetchAll = () => ({
+  type: REFETCH,
+  payload: {
+    request:{
+      url: '/reset',
+      method: 'get',
+      headers: getHeaders(true)
+    }
+  }
+})

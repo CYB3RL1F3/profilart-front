@@ -36,7 +36,7 @@ export const Menu: FC<MenuProps> = ({ history, location, profile }) => {
      close();
   }, [history, close]);
 
-  const getClassName = (path: string) => location.pathname === path ? "selected" : ""
+  const getClassName = useCallback((path: string) => location.pathname === path ? "selected" : "", [location.pathname])
 
   const items: MenuItem[] = useMemo(() => ([
     {
@@ -62,13 +62,20 @@ export const Menu: FC<MenuProps> = ({ history, location, profile }) => {
       className: getClassName(paths.posts)
     },
     {
+      label: 'Notification center',
+      icon: 'pi pi-md-notifications',
+      url: paths.notifications,
+      command,
+      className: getClassName(paths.notifications)
+    },
+    {
       label: 'Contact support',
       icon: 'pi pi-envelope',
       url: paths.support,
       command,
       className: getClassName(paths.support)
     }
-  ]), [command, location]);
+  ]), [command, getClassName]);
 
   const disconnect = useCallback(async (e) => {
     if (e.preventDefault) e.preventDefault();

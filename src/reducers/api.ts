@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { CALL, CALL_SUCCESS, CALL_FAIL, CALL_CLOSE_ERROR, CALL_CLEAR, GET_STATUS, GET_STATUS_FAIL } from 'constants/api';
+import { CALL, CALL_SUCCESS, CALL_FAIL, CALL_CLOSE_ERROR, CALL_CLEAR, GET_STATUS, GET_STATUS_FAIL, REFETCH, REFETCH_SUCCESS, REFETCH_FAIL } from 'constants/api';
 import { AnyAction } from 'redux';
 import { APIError } from 'types/Api';
 import { GET_STATUS_SUCCESS } from '../constants/api';
@@ -11,6 +11,7 @@ export interface ApiReducer {
     loading: boolean;
     error: APIError;
     active: boolean;
+    successRefetch: boolean;
 }
 
 export const initialState: ApiReducer = {
@@ -19,7 +20,8 @@ export const initialState: ApiReducer = {
     success: false,
     loading: false,
     error: null,
-    active: true
+    active: true,
+    successRefetch: false
 };
 
 export const apiReducer = handleActions({
@@ -67,7 +69,25 @@ export const apiReducer = handleActions({
     ...state,
     loading: false,
     active: false
-  })
+  }),
+  [REFETCH]: (state, { payload }: AnyAction) => ({
+    ...state,
+    successRefetch: false,
+    loading: true,
+    error: null
+  }),
+  [REFETCH_SUCCESS]: (state, { payload }: AnyAction) => ({
+    ...state,
+    loading: false,
+    successRefetch: true,
+    error: null
+  }),
+  [REFETCH_FAIL]: (state, { error }: AnyAction) => ({
+    ...state,
+    error,
+    loading: false,
+    successRefetch: false
+  }),
 }, initialState);
 
 export default apiReducer;

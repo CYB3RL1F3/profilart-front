@@ -14,6 +14,7 @@ export interface ResidentAdvisorProfile {
 export interface SoundcloudProfile {
   id: string;
   url: string;
+  playlists?: string[];
 }
 
 export interface DiscogsProfile {
