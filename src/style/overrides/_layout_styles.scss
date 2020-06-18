@@ -111,6 +111,15 @@ body {
         max-width: 125px;
         flex-direction: column;
 
+        &.notify {
+          max-width: 100%;
+          flex-direction: row;
+          justify-content: flex-end;
+          .p-button {
+            margin: 7px;
+          }
+        }
+
         @media(max-width: 960px) {
           flex-direction: row;
           max-width: 100%;
@@ -252,7 +261,7 @@ body .p-messages .p-messages-close {
 }
 
 
-.postsPage, .support, .visualizePage {
+.postsPage, .support, .visualizePage, .notificationsPage {
   opacity: 0;
   animation: appear 0.25s linear forwards;
   animation-delay: 0.1s;
@@ -348,5 +357,15 @@ div.layout-content.postsPage > div.p-grid.button_handler_mobile {
   & > div > button {
     width: calc(100% - 15px);
     margin: 0 8px;
+  }
+}
+
+.notificationCenter {
+  margin: 10px;
+  ul {
+    margin: 20px;
+    li {
+      padding: 5px;
+    }
   }
 }
