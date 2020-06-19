@@ -10,6 +10,10 @@ export const GET_STATUS: "API/GET_STATUS" = "API/GET_STATUS";
 export const GET_STATUS_SUCCESS: "API/GET_STATUS_SUCCESS" = "API/GET_STATUS_SUCCESS";
 export const GET_STATUS_FAIL: "API/GET_STATUS_FAIL" = "API/GET_STATUS_FAIL";
 
+export const REFETCH: "API/REFETCH" = "API/REFETCH";
+export const REFETCH_SUCCESS: "API/REFETCH_SUCCESS" = "API/REFETCH_SUCCESS";
+export const REFETCH_FAIL: "API/REFETCH_FAIL" = "API/REFETCH_FAIL";
+
 // export const BASE_URL: "https://profilart.fr" = "https://profilart.fr";
 export const BASE_URL = config.api;
 

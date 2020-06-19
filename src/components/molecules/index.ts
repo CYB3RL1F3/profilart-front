@@ -5,6 +5,7 @@ export { default as Slider } from "./Slider";
 export { default as Dropdown } from './DropDown';
 export { default as LoadingPosts } from './LoadingPosts';
 export { default as PostComponent } from './Post';
+export { default as NotificationCenterComponent } from './NotificationCenter';
 export { default as Editor } from './Editor';
 export { default as Switch } from './Switch';
 export { default as Footer } from './Footer';

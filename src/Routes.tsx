@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Route, Switch } from "react-router-dom";
 
 import PrivateRoute from "components/routes/PrivateRoute";
-import { Login, Main, Visualize, Posts, Register } from "containers";
+import { Login, Main, Visualize, Posts, Register, Notifications } from "containers";
 import { Location } from "history";
 import ForgottenPassword from "containers/ForgottenPassword";
 import Maintenance from './containers/Maintenance';
@@ -36,6 +36,13 @@ export const Routes: FC<RoutesProps> = ({ authenticated, location }) => {
           exact
           path={paths.posts}
           component={ Posts }
+          authenticated={authenticated}
+          location={location}
+      />
+      <PrivateRoute
+          exact
+          path={paths.notifications}
+          component={ Notifications }
           authenticated={authenticated}
           location={location}
       />

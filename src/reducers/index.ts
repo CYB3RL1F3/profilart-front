@@ -5,6 +5,8 @@ import posts, { PostsReducer } from './posts';
 import { combineReducers } from 'redux';
 import { routerReducer as routing, RouterState } from 'react-router-redux';
 import support, { SupportReducer } from './support';
+import { NotificationCenterReducer } from 'types/Notifications';
+import notifications from './notifications';
 
 export interface SessionReducer {
   authenticated: boolean;
@@ -16,6 +18,7 @@ export interface AppState {
   posts: PostsReducer;
   support: SupportReducer;
   session: SessionReducer;
+  notifications: NotificationCenterReducer;
   routing: RouterState
 }
 
@@ -24,6 +27,7 @@ export const reducers = combineReducers<AppState>({
   user,
   posts,
   support,
+  notifications,
   session,
   routing
 })

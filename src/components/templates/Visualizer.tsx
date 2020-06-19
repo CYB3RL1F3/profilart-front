@@ -6,7 +6,7 @@ import { MessageType } from "components/atoms/Message";
 import { Link } from "react-router-dom";
 import { Button } from "primereact-working/button";
 import { useDispatch } from "react-redux";
-import { callUrl } from "actions/api";
+import { callUrl, refetchAll } from "actions/api";
 import { GridCol12 } from "components/atoms/Grid";
 import { BASE_URL } from 'constants/api';
 import { APIError } from 'types/Api';
@@ -23,6 +23,9 @@ export const Visualizer: FC<VisualizerProps> = ({ error, query, result, loading 
   const retry = useCallback(() => {
     dispatch(callUrl(query));
   }, [query, dispatch]);
+  const reset = useCallback(() => {
+    dispatch(refetchAll());
+  }, [dispatch]);
   let possibleCause = "";
   if (error) {
     switch(true) {
@@ -49,7 +52,9 @@ export const Visualizer: FC<VisualizerProps> = ({ error, query, result, loading 
             <><span className="lbl">Query:</span> <code>{query}</code></>
           )}
           <span className="button_query">
-            <Button label="Retry" onClick={retry} />
+
+            <Button disabled={loading} label="Reset" onClick={reset} />
+            <Button disabled={loading} label="Retry" onClick={retry} />
           </span>
         </h4>
         <hr />

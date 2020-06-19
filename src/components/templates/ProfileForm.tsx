@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { GridDashboard, GridCol6, GridCol, GridCol12 } from "components/atoms/Grid";
 import { Button } from "primereact-working/button";
 import { PASSWORD, CONFIRM_PASSWORD, WEBSITE, RESIDENT_ADVISOR, DISCOGS, MAILER, CACHE, CURRENT_PASSWORD, ARTIST_NAME, EMAIL, SOUNDCLOUD } from 'constants/profileForm';
-import { validateResidentAdvisor } from "utils/validators";
+import { validateResidentAdvisor, cleanPlaylists } from "utils/validators";
 import { Profile, UpdateProfileFormData } from 'types/Profile';
 import { scrollToTopestElementClassName } from "utils/scroll";
 import { ConfirmDeletionModal } from "components/molecules/Modals/ConfirmDeletion";
@@ -47,6 +47,9 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
     if (!values.cache?.use) {
       delete values.cache;
     }
+    if (!!values.soundcloud && !!values.soundcloud?.playlists) {
+      values.soundcloud.playlists = cleanPlaylists(values.soundcloud.playlists);
+    }
     const currentEmail = `${defaultValues?.email}`;
     if (!isCreationForm && currentEmail) {
       values.totalReplace = !values.password && !values.newPassword && values.email === currentEmail;
@@ -83,6 +86,12 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
     toggleDeleteModal(true);
   }, [toggleDeleteModal]);
 
+  const getNewPlaylistsValue = useCallback((value: string, i: number) => {
+    const playlists = watch(SOUNDCLOUD.PLAYLISTS) || [];
+    playlists[i] = value;
+    return playlists;
+  }, [watch]);
+
 
   const setEmail = useCallback((value: string) => setValue(EMAIL, value, submitted), [setValue]);
   const setArtistName = useCallback((value: string) => setValue(ARTIST_NAME, value, submitted), [setValue]);
@@ -97,6 +106,7 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
   
   const setSoundcloud = useCallback((value: string) => setValue(SOUNDCLOUD.URL, value, submitted), [setValue]);
   const setDiscogs = useCallback((value: string) => setValue(DISCOGS.URL, value, submitted), [setValue]);
+  const setPlaylists = useCallback((i: number) => (value: string) => setValue(SOUNDCLOUD.PLAYLISTS, getNewPlaylistsValue(value, i), submitted), [setValue]);
   
   const setRecipient = useCallback((value: string) => setValue(MAILER.RECIPIENT, value, submitted), [setValue]);
   const setPrefix = useCallback((value: string) => setValue(MAILER.PREFIX, value, submitted), [setValue]);
@@ -147,8 +157,10 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
     });
 
     registerInput(SOUNDCLOUD.URL, false, {
-      validate: (value: string) => !value || /^(?:https?:\/\/)?(soundcloud.com\/)[a-zA-Z0-9\-_.]*/gmi.test(value) ? true : "invalid Soundcloud artist page URL"
+      validate: (value: string) => !value || /^(?:https?:\/\/)?(soundcloud.com\/)[a-zA-Z0-9\-_.]*/gmi.test(value) ? true : "invalid Soundcloud artist page URL",
+      canBeEmpty: (value: string) => !!value || (!value && !watch(SOUNDCLOUD.PLAYLISTS) ? true : "You can't define playlists without URL")
     });
+    registerInput(SOUNDCLOUD.PLAYLISTS, false);
     registerInput(DISCOGS.URL, false, {
       validate: (value: string) => !value || /^(?:https?:\/\/)(www\.)?(discogs\.com\/artist\/)[a-zA-Z0-9\-_.].*/gmi.test(value) ? true :  "invalid Discogs artist page URL"
     });
@@ -172,6 +184,8 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
     scrollToTopestElementClassName("input-error", offset);
    }, 100);
   })
+
+  const playlists: string[] = watch(SOUNDCLOUD.PLAYLISTS, defaultValues?.soundcloud?.playlists || []);
 
   const usingCache = watch(CACHE.USE);
   const disableCheckbox = usingCache === undefined ? !defaultValues?.cache?.use || false : !usingCache;
@@ -274,6 +288,24 @@ export const ProfileForm: FC<ProfileFormProps> = ({ loading, context, defaultVal
                   onChange={setPrefix}
                 />
               </GridCol12>
+            </Card>
+          </GridCol>
+          <GridCol>
+            <Card title="Soundcloud playlists configuration" className="delay-3-s">
+              <p>Paste URL of playlists from your soundcloud to be used as musical sources:</p>
+              {[...playlists, ""].map((playlist, i) => (
+                <GridCol12 key={i}>
+                  <Input
+                    id={SOUNDCLOUD.PLAYLISTS}
+                    type="text"
+                    label="Recipient"
+                    defaultValue={playlist}
+                    name={SOUNDCLOUD.PLAYLISTS}
+                    onChange={setPlaylists(i)}
+                    error={errors.soundcloud?.playlists?.message || errors.soundcloud?.playlists?.type}
+                  />
+                </GridCol12>
+              ))}
             </Card>
           </GridCol>
         </GridCol6>

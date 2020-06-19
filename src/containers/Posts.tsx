@@ -2,7 +2,6 @@ import React, { FC, Suspense, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PostsReducer } from 'reducers/posts';
 import { AppState } from "reducers";
-import { UserReducer } from 'reducers/user';
 import { LoadingPosts, Footer } from 'components/molecules';
 import { PostsList } from 'components/templates/PostsList';
 import { closePostNotif, openFormModal, closeErrorNotif, getAllPosts } from "actions/post";
