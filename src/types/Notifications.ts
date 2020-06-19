@@ -7,6 +7,8 @@ export interface Notification {
 
 export interface NotificationArgs {
   content: string;
+  action: string;
+  title: string;
   id: string;
 }
 

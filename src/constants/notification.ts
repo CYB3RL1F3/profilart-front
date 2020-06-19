@@ -31,3 +31,5 @@ export const FORM_INPUT_WEBSITE: "website" = "website";
 export const FORM_INPUT_EMAIL: "email" = "email";
 export const FORM_INPUT_GCM_API_KEY: "gcmApiKey" = "gcmApiKey";
 export const FORM_INPUT_CONTENT: "content" = "content";
+export const FORM_INPUT_TITLE: "title" = "title";
+export const FORM_INPUT_ACTION: "action" = "action";

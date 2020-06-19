@@ -476,3 +476,24 @@ body .p-component-overlay {
     align-items: center;
     justify-content: center;
 }
+
+.notify_editor {
+    width: 40vw;
+    @media(max-width: 960px) {
+        width: 75vw;
+    }
+    @media(max-width: 720px) {
+        width: 100vw;
+    }
+}
+
+
+.form_editor, .notification_editor {
+    width: 60vw;
+    @media(max-width: 960px) {
+        width: 75vw;
+    }
+    @media(max-width: 720px) {
+        width: 100vw;
+    }
+}

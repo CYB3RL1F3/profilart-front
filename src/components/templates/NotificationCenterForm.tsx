@@ -81,7 +81,7 @@ export const NotificationCenterForm: FC = () => {
 
   return (
     <Dialog baseZIndex={10000000000} onHide={hide} visible={modal.opened} header={header}>
-      <form className="post_editor" onSubmit={handleSubmit(submit)}>
+      <form className="notification_editor" onSubmit={handleSubmit(submit)}>
         <GridDashboard>
           <GridCol>
             <GridCol12>
