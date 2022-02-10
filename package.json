@@ -28,7 +28,7 @@
     "heroku-ssl-redirect": "^0.0.4",
     "history": "^4.10.1",
     "html-react-parser": "^0.10.3",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "primeflex": "^1.1.0",
     "primeicons": "^2.0.0",
     "primereact-working": "^4.2.2",
